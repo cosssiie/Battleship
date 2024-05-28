@@ -2,7 +2,7 @@ import java.util.Collections;
 
 public class SimpleRandom extends Battleship {
 
-    public SimpleRandom(SelectionGrid playerGrid) {
+    public SimpleRandom(Selection playerGrid) {
         super(playerGrid);
         Collections.shuffle(validMoves);
     }
