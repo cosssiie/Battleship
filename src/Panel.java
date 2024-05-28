@@ -18,11 +18,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private int placingShipIndex;
     private GameState gameState;
     public static boolean debugModeActive;
+
     public Panel(int aiChoice) {
-        computer = new Selection(0,0);
-        player = new Selection(0,computer.getHeight()+50);
-        setBackground(new Color(42, 136, 163));
-        setPreferredSize(new Dimension(computer.getWidth(), player.getPosition().y + player.getHeight()));
+        computer = new Selection(10,10);
+        player = new Selection(computer.getWidth() + 50, 10);
+        setBackground(new Color(255, 255, 255));
+        setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 100));
         addMouseListener(this);
         addMouseMotionListener(this);
         if(aiChoice == 0) aiController = new SimpleRandom(player);

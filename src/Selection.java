@@ -8,7 +8,7 @@ public class Selection extends Rectangle {
     /**
      * Розмір клітинки в пікселях.
      */
-    public static final int CELL_SIZE = 30;
+    public static final int CELL_SIZE = 35;
 
     /**
      * Кількість клітинок в рядку.

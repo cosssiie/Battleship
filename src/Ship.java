@@ -31,9 +31,9 @@ public class Ship {
 
     public void paint(Graphics g) {
         if(shipPlacementColour == ShipPlacementColour.Placed) {
-            g.setColor(destroyedSections >= segments ? Color.RED : Color.DARK_GRAY);
+            g.setColor(new Color(157, 154, 154, 250));
         } else {
-            g.setColor(shipPlacementColour == ShipPlacementColour.Valid ? Color.GREEN : Color.RED);
+            g.setColor(shipPlacementColour == ShipPlacementColour.Valid ? new Color(127, 215, 91, 250): new Color(239, 53, 53, 250));
         }
         if(isSideways) paintHorizontal(g);
         else paintVertical(g);

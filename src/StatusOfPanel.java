@@ -3,13 +3,13 @@ public class StatusOfPanel extends Rectangle{
 
     private final Font font = new Font("Arial", Font.BOLD, 20);
 
-    private final String placingShipLine1 = "Place your Ships below!";
+    private final String placingShipLine1 = "Place your Ships on the right!";
 
     private final String placingShipLine2 = "Z to rotate.";
 
     private final String gameOverLossLine = "Game Over! You Lost :(";
 
-    private final String gameOverWinLine = "You won! Well done!";
+    private final String gameOverWinLine = "You won!";
 
     private final String gameOverBottomLine = "Press R to restart.";
 
@@ -48,13 +48,13 @@ public class StatusOfPanel extends Rectangle{
 
 
     public void paint(Graphics g) {
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(position.x, position.y, width, height);
+//        g.setColor(Color.LIGHT_GRAY);
+//        g.fillRect(position.x, position.y, width, height);
         g.setColor(Color.BLACK);
         g.setFont(font);
         int strWidth = g.getFontMetrics().stringWidth(topLine);
-        g.drawString(topLine, position.x+width/2-strWidth/2, position.y+20);
+        g.drawString(topLine, position.x+width/2-strWidth/2, position.y+50);
         strWidth = g.getFontMetrics().stringWidth(bottomLine);
-        g.drawString(bottomLine, position.x+width/2-strWidth/2, position.y+40);
+        g.drawString(bottomLine, position.x+width/2-strWidth/2, position.y+70);
     }
 }
