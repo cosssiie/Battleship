@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class BattleshipAI {
+public class Battleship {
    
     protected Selection playerGrid;
     protected List<PositionXY> validMoves;
     
-    public BattleshipAI(Selection playerGrid) {
+    public Battleship(Selection playerGrid) {
         this.playerGrid = playerGrid;
         createValidMoveList();
     }
