@@ -77,11 +77,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private void tryPlaceShip(PositionXY mousePosition) {
         PositionXY targetPosition = player.getPositionInGrid(mousePosition.x, mousePosition.y);
         updateShipPlacement(targetPosition);
-        if(player.canPlaceShipAt(targetPosition.x, targetPosition.y,
-                Selection.BOAT_SIZES[placingShipIndex],placingShip.isSideways())) {
+        if(player.canPlaceShipWithGap(targetPosition.x, targetPosition.y,
+                Selection.BOAT_SIZES[placingShipIndex], placingShip.isSideways())) {
             placeShip(targetPosition);
         }
     }
+
     private void placeShip(PositionXY targetPosition) {
         placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Placed);
         player.placeShip(placingShip,tempPlacingPosition.x,tempPlacingPosition.y);
