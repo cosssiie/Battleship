@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Marker {
+public class Marker extends Rectangle{
 
     private final Color HIT_COLOUR = new Color(219, 23, 23, 180);
 
