@@ -1,19 +1,19 @@
 public class Rectangle {
 
-    protected Position position;
+    protected PositionXY position;
 
     protected int width;
 
     protected int height;
 
-    public Rectangle(Position position, int width, int height) {
+    public Rectangle(PositionXY position, int width, int height) {
         this.position = position;
         this.width = width;
         this.height = height;
     }
 
     public Rectangle(int x, int y, int width, int height) {
-        this(new Position(x,y),width,height);
+        this(new PositionXY(x,y),width,height);
     }
 
     public int getHeight() {
@@ -24,11 +24,11 @@ public class Rectangle {
         return width;
     }
 
-    public Position getPosition() {
+    public PositionXY getPosition() {
         return position;
     }
 
-    public boolean isPositionInside(Position targetPosition) {
+    public boolean isPositionInside(PositionXY targetPosition) {
         return targetPosition.x >= position.x && targetPosition.y >= position.y
                 && targetPosition.x < position.x + width && targetPosition.y < position.y + height;
     }
