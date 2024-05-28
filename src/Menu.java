@@ -11,8 +11,8 @@ import java.io.IOException;
 
 public class Menu extends JFrame {
 
-    private static final String IMAGE_PATH = "Battleship\\ship_photo.jpg";
-    private static final String AUDIO_PATH = "Battleship\\mainMenuMusic.wav";
+    private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
+    private static final String AUDIO_PATH = "Battleship//mainMenuMusic.wav";
 
     public Menu() {
         setTitle("Морський бій");
