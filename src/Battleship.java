@@ -3,16 +3,16 @@ import java.util.List;
 
 public class BattleshipAI {
    
-    protected SelectionGrid playerGrid;
-    protected List<Position> validMoves;
+    protected Selection playerGrid;
+    protected List<PositionXY> validMoves;
     
-    public BattleshipAI(SelectionGrid playerGrid) {
+    public BattleshipAI(Selection playerGrid) {
         this.playerGrid = playerGrid;
         createValidMoveList();
     }
     
-    public Position selectMove() {
-        return Position.ZERO;
+    public PositionXY selectMove() {
+        return PositionXY.ZERO;
     }
     
     public void reset() {
@@ -21,9 +21,9 @@ public class BattleshipAI {
     
     private void createValidMoveList() {
         validMoves = new ArrayList<>();
-        for(int x = 0; x < SelectionGrid.GRID_WIDTH; x++) {
-            for(int y = 0; y < SelectionGrid.GRID_HEIGHT; y++) {
-                validMoves.add(new Position(x,y));
+        for(int x = 0; x < Selection.GRID_WIDTH; x++) {
+            for(int y = 0; y < Selection.GRID_HEIGHT; y++) {
+                validMoves.add(new PositionXY(x,y));
             }
         }
     }
