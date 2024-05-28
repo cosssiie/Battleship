@@ -11,6 +11,7 @@ public class Main implements KeyListener {
     private Panel gamePanel;
 
     public Main() {
+
         // Choose the AI Difficulty
         String[] options = new String[] {"Easy", "Medium", "Hard"};
         String message = "Easy will make moves entirely randomly,\nMedium will focus on areas where it finds ships,"
