@@ -12,7 +12,7 @@ public class Smarter extends Battleship{
 
     private boolean maximiseAdjacentRandomisation;
 
-    public Smarter(SelectionGrid playerGrid, boolean preferMovesFormingLine, boolean maximiseAdjacentRandomisation) {
+    public Smarter(Selection playerGrid, boolean preferMovesFormingLine, boolean maximiseAdjacentRandomisation) {
         super(playerGrid);
         shipHits = new ArrayList<>();
         this.preferMovesFormingLine = preferMovesFormingLine;
