@@ -26,8 +26,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 100));
         addMouseListener(this);
         addMouseMotionListener(this);
-        if(aiChoice == 0) aiController = new SimpleRandom(player);
-        else aiController = new Smarter(player,aiChoice == 2,aiChoice == 2);
+        if(aiChoice == 0) {
+            aiController = new SimpleRandom(player);
+        }
+        else {
+            aiController = new Smarter(player, aiChoice == 2, aiChoice == 2);
+        }
         statusPanel = new StatusOfPanel(new PositionXY(0,computer.getHeight()+1),computer.getWidth(),49);
         restart();
     }
