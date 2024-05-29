@@ -13,6 +13,7 @@ public class Menu extends JFrame {
 
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
     private static final String AUDIO_PATH = "Battleship//mainMenuMusic.wav";
+    private Panel gamePanel;
 
     public Menu() {
         setTitle("Морський бій");
@@ -34,8 +35,8 @@ public class Menu extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Тут можна додати дії для початку гри
-                JOptionPane.showMessageDialog(null, "Гра почалася!");
+                JOptionPane.showMessageDialog(null, "Легкий рівень гри почався!");
+                startGame(0); // Запускаємо гру з легким рівнем
             }
         });
 
@@ -81,6 +82,20 @@ public class Menu extends JFrame {
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
+    }
+    private void startGame(int difficultyChoice) {
+        JFrame gameFrame = new JFrame("Battleship");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setResizable(false);
+
+        Panel gamePanel = new Panel(difficultyChoice);
+        gameFrame.getContentPane().add(gamePanel);
+
+        gameFrame.pack();
+        gameFrame.setVisible(true);
+
+        // Закрити меню після запуску гри
+        this.dispose();
     }
 
 
