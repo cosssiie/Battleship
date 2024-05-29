@@ -11,9 +11,10 @@ import java.io.IOException;
 
 public class Menu extends JFrame {
 
+    private static final String MENU_MUSIC_PATH = "Battleship//mainMenuMusic.wav";
+    private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
-    private static final String AUDIO_PATH = "Battleship//mainMenuMusic.wav";
-    private Panel gamePanel;
+    private Clip menuMusicClip;
 
     public Menu() {
         setTitle("Морський бій");
@@ -35,7 +36,6 @@ public class Menu extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Легкий рівень гри почався!");
                 startGame(0); // Запускаємо гру з легким рівнем
             }
         });
@@ -64,14 +64,14 @@ public class Menu extends JFrame {
         add(imagePanel);
 
         // Відтворюємо музику на фоні
-        playBackgroundMusic(AUDIO_PATH);
+        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
 
         // Відображаємо вікно
         setVisible(true);
     }
 
     // Метод для відтворення музики на фоні
-    private void playBackgroundMusic(String audioPath) {
+    private Clip playBackgroundMusic(String audioPath) {
         try {
             File audioFile = new File(audioPath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
@@ -79,25 +79,46 @@ public class Menu extends JFrame {
             clip.open(audioStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY); // Безперервне відтворення
             clip.start();
+            return clip;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
+            return null;
         }
     }
+
+    // Метод для зупинки музики
+    private void stopMusic(Clip clip) {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+            clip.close();
+        }
+    }
+
     private void startGame(int difficultyChoice) {
+        // Зупиняємо музику меню
+        stopMusic(menuMusicClip);
+
+        // Відтворюємо музику для гри
+        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
+
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
 
+        JLabel easyLevel = new JLabel("Easy level");
+        easyLevel.setBounds(200, 0, 0, 0);
+        easyLevel.setFont(new Font("Arial", Font.BOLD, 24));
+
         Panel gamePanel = new Panel(difficultyChoice);
         gameFrame.getContentPane().add(gamePanel);
 
+        gamePanel.add(easyLevel);
         gameFrame.pack();
         gameFrame.setVisible(true);
 
         // Закрити меню після запуску гри
         this.dispose();
     }
-
 
     // Внутрішній клас для панелі із зображенням
     private class ImagePanel extends JPanel {

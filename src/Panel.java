@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
@@ -20,30 +19,32 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     public static boolean debugModeActive;
 
     public Panel(int aiChoice) {
-        computer = new Selection(10,10);
-        player = new Selection(computer.getWidth() + 50, 10);
+        computer = new Selection(10, 30);
+        player = new Selection(computer.getWidth() + 50, 30);
         setBackground(new Color(255, 255, 255));
-        setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 100));
+        setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 120));
         addMouseListener(this);
         addMouseMotionListener(this);
-        if(aiChoice == 0) {
+
+        if (aiChoice == 0) {
             aiController = new SimpleRandom(player);
-        }
-        else {
+        } else {
             aiController = new Smarter(player, aiChoice == 2, aiChoice == 2);
         }
-        statusPanel = new StatusOfPanel(new PositionXY(0,computer.getHeight()+1),computer.getWidth(),49);
+
+        statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 49);
         restart();
     }
     public void paint(Graphics g) {
         super.paint(g);
         computer.paint(g);
         player.paint(g);
-        if(gameState == GameState.PlacingShips) {
+        if (gameState == GameState.PlacingShips) {
             placingShip.paint(g);
         }
         statusPanel.paint(g);
     }
+
     public void handleInput(int keyCode) {
         if(keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(1);
