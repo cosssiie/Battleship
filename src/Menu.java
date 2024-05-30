@@ -104,16 +104,26 @@ public class Menu extends JFrame {
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
-
-        JLabel easyLevel = new JLabel("Easy level");
-        easyLevel.setBounds(200, 0, 0, 0);
-        easyLevel.setFont(new Font("Arial", Font.BOLD, 24));
+        gameFrame.setSize(680, 450); // Задаємо розмір для нового вікна гри
+        gameFrame.setLocationRelativeTo(null); // Центруємо вікно
 
         Panel gamePanel = new Panel(difficultyChoice);
+        gamePanel.setLayout(null); // Встановлюємо абсолютне позиціонування для gamePanel
         gameFrame.getContentPane().add(gamePanel);
 
-        gamePanel.add(easyLevel);
-        gameFrame.pack();
+        RoundedButton autoPlaceButton = new RoundedButton("Auto Place Ships");
+        autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
+        autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
+        autoPlaceButton.setForeground(Color.WHITE);
+        autoPlaceButton.setBounds(400, 350, 200, 50);
+        autoPlaceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePanel.autoPlaceShips();
+            }
+        });
+
+        gamePanel.add(autoPlaceButton);
         gameFrame.setVisible(true);
 
         // Закрити меню після запуску гри

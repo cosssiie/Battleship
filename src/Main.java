@@ -11,25 +11,24 @@ public class Main implements KeyListener {
     private Panel gamePanel;
 
     public Main() {
-
         // Choose the AI Difficulty
         String[] options = new String[] {"Easy", "Medium", "Hard"};
-        String message = "Easy will make moves entirely randomly,\nMedium will focus on areas where it finds ships,"
-                + "\nand Hard will make smarter choices over Medium.";
-        int difficultyChoice = JOptionPane.showOptionDialog(null, message,
-                "Choose an AI Difficulty",
-                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                null, options, options[0]);
+        int aiChoice = JOptionPane.showOptionDialog(null, "Choose AI difficulty", "AI Difficulty",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        gamePanel = new Panel(aiChoice);
 
         JFrame frame = new JFrame("Battleship");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        gamePanel = new Panel(difficultyChoice);
+        frame.getContentPane().setLayout(null);
         frame.getContentPane().add(gamePanel);
+        gamePanel.setBounds(0, 0, gamePanel.getPreferredSize().width, gamePanel.getPreferredSize().height);
 
         frame.addKeyListener(this);
         frame.pack();
+        frame.setSize(gamePanel.getPreferredSize().width, gamePanel.getPreferredSize().height + 100);
         frame.setVisible(true);
     }
 

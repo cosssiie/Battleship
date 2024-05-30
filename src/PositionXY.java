@@ -37,19 +37,6 @@ public class PositionXY {
         this.y += otherPosition.y;
     }
 
-    public double distanceTo(PositionXY otherPosition) {
-        return Math.sqrt(Math.pow(x-otherPosition.x,2)+Math.pow(y-otherPosition.y,2));
-    }
-
-    public void multiply(int amount) {
-        x *= amount;
-        y *= amount;
-    }
-    public void subtract(PositionXY otherPosition) {
-        this.x -= otherPosition.x;
-        this.y -= otherPosition.y;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

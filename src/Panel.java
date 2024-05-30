@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -17,10 +15,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private int placingShipIndex;
     private GameState gameState;
     public static boolean debugModeActive;
+    private ArrayList<Ship> placedShips;
 
     public Panel(int aiChoice) {
         computer = new Selection(10, 30);
         player = new Selection(computer.getWidth() + 50, 30);
+        placedShips = new ArrayList<>();
         setBackground(new Color(255, 255, 255));
         setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 120));
         addMouseListener(this);
@@ -35,38 +35,72 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 49);
         restart();
     }
+
+    @Override
     public void paint(Graphics g) {
         super.paint(g);
         computer.paint(g);
         player.paint(g);
+        for (Ship ship : placedShips) {
+            ship.paint(g);
+        }
         if (gameState == GameState.PlacingShips) {
             placingShip.paint(g);
         }
         statusPanel.paint(g);
     }
 
+    public void autoPlaceShips() {
+        player.reset();
+        placedShips.clear();
+
+        for (int i = 0; i < Selection.BOAT_SIZES.length; i++) {
+            boolean placed = false;
+            while (!placed) {
+                boolean sideways = Math.random() < 0.5;
+                int x = (int) (Math.random() * (sideways ? Selection.GRID_WIDTH - Selection.BOAT_SIZES[i] : Selection.GRID_WIDTH));
+                int y = (int) (Math.random() * (!sideways ? Selection.GRID_HEIGHT - Selection.BOAT_SIZES[i] : Selection.GRID_HEIGHT));
+
+                if (player.canPlaceShipWithGap(x, y, Selection.BOAT_SIZES[i], sideways)) {
+                    Ship ship = new Ship(new PositionXY(x, y),
+                            new PositionXY(player.getPosition().x + x * Selection.CELL_SIZE,
+                                    player.getPosition().y + y * Selection.CELL_SIZE),
+                            Selection.BOAT_SIZES[i], sideways);
+                    player.placeShip(ship, x, y);
+                    placedShips.add(ship);
+                    placed = true;
+                }
+            }
+        }
+        gameState = GameState.FiringShots;
+        statusPanel.setTopLine("Attack the Computer!");
+        statusPanel.setBottomLine("Destroy all Ships to win!");
+        repaint();
+    }
+
     public void handleInput(int keyCode) {
-        if(keyCode == KeyEvent.VK_ESCAPE) {
+        if (keyCode == KeyEvent.VK_ESCAPE) {
             System.exit(1);
-        } else if(keyCode == KeyEvent.VK_R) {
+        } else if (keyCode == KeyEvent.VK_R) {
             restart();
-        } else if(gameState == GameState.PlacingShips && keyCode == KeyEvent.VK_Z) {
+        } else if (gameState == GameState.PlacingShips && keyCode == KeyEvent.VK_Z) {
             placingShip.toggleSideways();
             updateShipPlacement(tempPlacingPosition);
-        } else if(keyCode == KeyEvent.VK_D) {
+        } else if (keyCode == KeyEvent.VK_D) {
             debugModeActive = !debugModeActive;
         }
         repaint();
     }
+
     public void restart() {
         computer.reset();
         player.reset();
-        // Player can see their own ships by default
+        placedShips.clear();
         player.setShowShips(true);
         aiController.reset();
-        tempPlacingPosition = new PositionXY(0,0);
-        placingShip = new Ship(new PositionXY(0,0),
-                new PositionXY(player.getPosition().x,player.getPosition().y),
+        tempPlacingPosition = new PositionXY(0, 0);
+        placingShip = new Ship(new PositionXY(0, 0),
+                new PositionXY(player.getPosition().x, player.getPosition().y),
                 Selection.BOAT_SIZES[0], true);
         placingShipIndex = 0;
         updateShipPlacement(tempPlacingPosition);
