@@ -15,6 +15,7 @@ public class Menu extends JFrame {
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
     private Clip menuMusicClip;
+    private Panel gamePanel;
 
     public Menu() {
         setTitle("Морський бій");
@@ -36,6 +37,7 @@ public class Menu extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Легкий рівень гри почався!");
                 startGame(0); // Запускаємо гру з легким рівнем
             }
         });
@@ -106,7 +108,9 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(680, 450); // Задаємо розмір для нового вікна гри
         gameFrame.setLocationRelativeTo(null); // Центруємо вікно
-
+        JLabel easyLevel = new JLabel("Easy level");
+        easyLevel.setBounds(270, 0, 200, 30);
+        easyLevel.setFont(new Font("Arial", Font.BOLD, 24));
         Panel gamePanel = new Panel(difficultyChoice);
         gamePanel.setLayout(null); // Встановлюємо абсолютне позиціонування для gamePanel
         gameFrame.getContentPane().add(gamePanel);
@@ -122,7 +126,7 @@ public class Menu extends JFrame {
                 gamePanel.autoPlaceShips();
             }
         });
-
+        gamePanel.add(easyLevel);
         gamePanel.add(autoPlaceButton);
         gameFrame.setVisible(true);
 
