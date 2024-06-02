@@ -34,6 +34,30 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
 
         statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 49);
         restart();
+
+        KeyAdapter keyAdapter = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_Z && gameState == GameState.PlacingShips) {
+                    if (placingShip != null) {
+                        placingShip.toggleSideways();
+                        repaint();
+                    }
+                }
+            }
+        };
+
+        addKeyListener(keyAdapter);
+        setFocusable(true);
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_Z && gameState == GameState.PlacingShips) {
+            if (placingShip != null) {
+                placingShip.toggleSideways();
+                repaint();
+            }
+        }
     }
 
     @Override
