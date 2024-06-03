@@ -2,10 +2,7 @@ import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,10 +12,9 @@ public class Menu extends JFrame {
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
     private Clip menuMusicClip;
-    private Panel gamePanel;
+    public  static JButton autoPlaceButton;
 
-    public Menu() {
-        setTitle("Морський бій");
+    public Menu(String name) {
         setSize(600, 600); // Початковий розмір вікна
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Центрує вікно на екрані
@@ -115,7 +111,7 @@ public class Menu extends JFrame {
         gamePanel.setLayout(null); // Встановлюємо абсолютне позиціонування для gamePanel
         gameFrame.getContentPane().add(gamePanel);
 
-        RoundedButton autoPlaceButton = new RoundedButton("Auto Place Ships");
+        autoPlaceButton = new RoundedButton("Auto Place Ships");
         autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
         autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
         autoPlaceButton.setForeground(Color.WHITE);
@@ -192,11 +188,7 @@ public class Menu extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Menu();
-            }
-        });
+         Menu game = new Menu("Морський бій");
+
     }
 }

@@ -162,15 +162,19 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     }
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
-        // Ignore if position was already clicked
         if(!computer.isPositionMarked(targetPosition)) {
             doPlayerTurn(targetPosition);
-            // Only do the AI turn if the game didn't end from the player's turn.
+
+            if (Menu.autoPlaceButton.isEnabled()) {
+                Menu.autoPlaceButton.setEnabled(false);
+            }
+
             if(!computer.areAllShipsDestroyed()) {
                 doAITurn();
             }
         }
     }
+
     private void doPlayerTurn(PositionXY targetPosition) {
         boolean hit = computer.markPosition(targetPosition);
         String hitMiss = hit ? "Hit" : "Missed";
@@ -243,6 +247,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         tryMovePlacingShip(new PositionXY(e.getX(), e.getY()));
         repaint();
     }
+
+    public boolean isMoveMade() {
+        return gameState != GameState.PlacingShips;
+    }
+
 
     @Override
     public void mouseClicked(MouseEvent e) {}
