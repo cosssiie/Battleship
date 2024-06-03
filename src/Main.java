@@ -34,7 +34,6 @@ public class Main implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        gamePanel.handleInput(e.getKeyCode());
     }
 
     @Override

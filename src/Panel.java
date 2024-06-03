@@ -43,23 +43,19 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                         placingShip.toggleSideways();
                         repaint();
                     }
+                } else if (e.getKeyCode() == KeyEvent.VK_D) {
+                    debugModeActive = !debugModeActive;
+                    repaint();
+                } else if (e.getKeyCode() == KeyEvent.VK_R && gameState == GameState.GameOver) {
+                    restart();
                 }
             }
         };
 
         addKeyListener(keyAdapter);
         setFocusable(true);
+        requestFocusInWindow();
     }
-
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_Z && gameState == GameState.PlacingShips) {
-            if (placingShip != null) {
-                placingShip.toggleSideways();
-                repaint();
-            }
-        }
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -102,19 +98,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         repaint();
     }
 
-    public void handleInput(int keyCode) {
-        if (keyCode == KeyEvent.VK_ESCAPE) {
-            System.exit(1);
-        } else if (keyCode == KeyEvent.VK_R) {
-            restart();
-        } else if (gameState == GameState.PlacingShips && keyCode == KeyEvent.VK_Z) {
-            placingShip.toggleSideways();
-            updateShipPlacement(tempPlacingPosition);
-        } else if (keyCode == KeyEvent.VK_D) {
-            debugModeActive = !debugModeActive;
-        }
-        repaint();
-    }
 
     public void restart() {
         computer.reset();
@@ -246,10 +229,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if(gameState != GameState.PlacingShips) return;
         tryMovePlacingShip(new PositionXY(e.getX(), e.getY()));
         repaint();
-    }
-
-    public boolean isMoveMade() {
-        return gameState != GameState.PlacingShips;
     }
 
 

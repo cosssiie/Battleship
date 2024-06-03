@@ -12,6 +12,7 @@ public class Menu extends JFrame {
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
     private Clip menuMusicClip;
+    private Panel gamePanel;
     public  static JButton autoPlaceButton;
 
     public Menu(String name) {

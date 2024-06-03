@@ -5,7 +5,6 @@ import java.util.List;
 public class Ship {
     public enum ShipPlacementColour {Valid, Invalid, Placed}
 
-
     private PositionXY gridPosition;
 
     private PositionXY drawPosition;
