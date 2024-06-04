@@ -16,13 +16,17 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private GameState gameState;
     public static boolean debugModeActive;
     private ArrayList<Ship> placedShips;
+    private int difficultyChoice;
+    private JButton nextLevelButton;
 
     public Panel(int aiChoice) {
+        this.difficultyChoice = aiChoice;
         computer = new Selection(10, 30);
         player = new Selection(computer.getWidth() + 50, 30);
         placedShips = new ArrayList<>();
         setBackground(new Color(255, 255, 255));
-        setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 120));
+        setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 150));
+        setLayout(null);
         addMouseListener(this);
         addMouseMotionListener(this);
 
@@ -32,7 +36,15 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             aiController = new Smarter(player, aiChoice == 2, aiChoice == 2);
         }
 
-        statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 49);
+        statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
+        statusPanel.setBounds(10, player.getHeight() + 50, 500, 80);
+        add(statusPanel);
+
+        nextLevelButton = Menu.nextLevelButton;
+        nextLevelButton.setBounds(10, player.getHeight() + 130, 200, 50);
+        nextLevelButton.setVisible(false);
+        add(nextLevelButton);
+
         restart();
 
         KeyAdapter keyAdapter = new KeyAdapter() {
@@ -48,6 +60,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                     repaint();
                 } else if (e.getKeyCode() == KeyEvent.VK_R && gameState == GameState.GameOver) {
                     restart();
+                } else if (e.getKeyCode() == KeyEvent.VK_N && gameState == GameState.GameOver) {
+                    nextLevel();
                 }
             }
         };
@@ -56,6 +70,17 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         setFocusable(true);
         requestFocusInWindow();
     }
+
+    public void nextLevel() {
+        if (difficultyChoice == 0) {
+            difficultyChoice = 1;
+        } else if (difficultyChoice == 1) {
+            difficultyChoice = 2;
+        }
+        nextLevelButton.setVisible(false);
+        restart();
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -67,7 +92,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if (gameState == GameState.PlacingShips) {
             placingShip.paint(g);
         }
-        statusPanel.paint(g);
+        statusPanel.repaint();
     }
 
     public void autoPlaceShips() {
@@ -98,7 +123,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         repaint();
     }
 
-
     public void restart() {
         computer.reset();
         player.reset();
@@ -116,6 +140,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         statusPanel.reset();
         gameState = GameState.PlacingShips;
     }
+
     private void tryPlaceShip(PositionXY mousePosition) {
         PositionXY targetPosition = player.getPositionInGrid(mousePosition.x, mousePosition.y);
         updateShipPlacement(targetPosition);
@@ -125,12 +150,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
     }
 
-
     private void placeShip(PositionXY targetPosition) {
         placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Placed);
         player.placeShip(placingShip,tempPlacingPosition.x,tempPlacingPosition.y);
         placingShipIndex++;
-        // If there are still ships to place
         if(placingShipIndex < Selection.BOAT_SIZES.length) {
             placingShip = new Ship(new PositionXY(targetPosition.x, targetPosition.y),
                     new PositionXY(player.getPosition().x + targetPosition.x * Selection.CELL_SIZE,
@@ -143,6 +166,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             statusPanel.setBottomLine("Destroy all Ships to win!");
         }
     }
+
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
         if(!computer.isPositionMarked(targetPosition)) {
@@ -167,11 +191,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
         statusPanel.setTopLine("Player " + hitMiss + " " + targetPosition + destroyed);
         if(computer.areAllShipsDestroyed()) {
-            // Player wins!
             gameState = GameState.GameOver;
-            statusPanel.showGameOver(true);
+            statusPanel.setTopLine("You won!");
+            statusPanel.setBottomLine("<html>Press R to restart.<br>Press N to go to next level.</html>");
+            Menu.nextLevelButton.setVisible(true);
+            repaint();
         }
     }
+
     private void doAITurn() {
         PositionXY aiMove = aiController.selectMove();
         boolean hit = player.markPosition(aiMove);
@@ -182,31 +209,28 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
         statusPanel.setBottomLine("Computer " + hitMiss + " " + aiMove + destroyed);
         if(player.areAllShipsDestroyed()) {
-            // Computer wins!
             gameState = GameState.GameOver;
             statusPanel.showGameOver(false);
         }
     }
+
     private void tryMovePlacingShip(PositionXY mousePosition) {
         if(player.isPositionInside(mousePosition)) {
             PositionXY targetPos = player.getPositionInGrid(mousePosition.x, mousePosition.y);
             updateShipPlacement(targetPos);
         }
     }
+
     private void updateShipPlacement(PositionXY targetPos) {
-        // Constrain to fit inside the grid
         if(placingShip.isSideways()) {
             targetPos.x = Math.min(targetPos.x, Selection.GRID_WIDTH - Selection.BOAT_SIZES[placingShipIndex]);
         } else {
             targetPos.y = Math.min(targetPos.y, Selection.GRID_HEIGHT - Selection.BOAT_SIZES[placingShipIndex]);
         }
-        // Update drawing position to use the new target position
         placingShip.setDrawPosition(new PositionXY(targetPos),
                 new PositionXY(player.getPosition().x + targetPos.x * Selection.CELL_SIZE,
                         player.getPosition().y + targetPos.y * Selection.CELL_SIZE));
-        // Store the grid position for other testing cases
         tempPlacingPosition = targetPos;
-        // Change the colour of the ship based on whether it could be placed at the current location.
         if(player.canPlaceShipAt(tempPlacingPosition.x, tempPlacingPosition.y,
                 Selection.BOAT_SIZES[placingShipIndex],placingShip.isSideways())) {
             placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Valid);
@@ -214,6 +238,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             placingShip.setShipPlacementColour(Ship.ShipPlacementColour.Invalid);
         }
     }
+
     @Override
     public void mouseReleased(MouseEvent e) {
         PositionXY mousePosition = new PositionXY(e.getX(), e.getY());
@@ -224,13 +249,13 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
         repaint();
     }
+
     @Override
     public void mouseMoved(MouseEvent e) {
         if(gameState != GameState.PlacingShips) return;
         tryMovePlacingShip(new PositionXY(e.getX(), e.getY()));
         repaint();
     }
-
 
     @Override
     public void mouseClicked(MouseEvent e) {}
@@ -242,5 +267,4 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseExited(MouseEvent e) {}
     @Override
     public void mouseDragged(MouseEvent e) {}
-
 }
