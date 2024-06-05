@@ -116,7 +116,7 @@ public class Menu extends JFrame {
         autoPlaceButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                autoPlaceButton.setBackground(new Color(9, 52, 152, 179));
+                autoPlaceButton.setBackground(new Color(8, 49, 131, 182));
                 autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 18));
                 autoPlaceButton.setBounds(410, 355,  185, 42);
             }
@@ -155,7 +155,7 @@ public class Menu extends JFrame {
         nextLevelButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                nextLevelButton.setBackground(new Color(3, 34, 65, 250));
+                nextLevelButton.setBackground(new Color(4, 29, 56, 250));
                 nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
                 nextLevelButton.setForeground(Color.WHITE);
                 nextLevelButton.setBounds(410, 435, 185, 42);
