@@ -179,4 +179,13 @@ public class Selection extends Rectangle {
         }
         return true;
     }
+    public void paintMarkers(Graphics g) {
+        for (int y = 0; y < GRID_HEIGHT; y++) {
+            for (int x = 0; x < GRID_WIDTH; x++) {
+                if (markers[y][x] != null) {
+                    markers[y][x].paint(g);
+                }
+            }
+        }
+    }
 }

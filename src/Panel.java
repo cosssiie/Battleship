@@ -89,6 +89,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if (gameState == GameState.PlacingShips) {
             placingShip.paint(g);
         }
+        computer.paintMarkers(g);
+        player.paintMarkers(g);
+
         statusPanel.repaint();
     }
 
