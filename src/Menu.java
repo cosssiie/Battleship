@@ -112,6 +112,23 @@ public class Menu extends JFrame {
                 gamePanel.autoPlaceShips();
             }
         });
+
+        autoPlaceButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                autoPlaceButton.setBackground(new Color(9, 52, 152, 179));
+                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 18));
+                autoPlaceButton.setBounds(400, 350,  185, 42);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
+                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
+                autoPlaceButton.setBounds(390, 345, 200, 50);
+            }
+        });
+
         gamePanel.add(easyLevel);
         gamePanel.add(autoPlaceButton);
         gameFrame.setVisible(true);
@@ -132,6 +149,23 @@ public class Menu extends JFrame {
                 if (gamePanel != null) {
                     startGame(1);
                 }
+            }
+        });
+
+        nextLevelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nextLevelButton.setBackground(new Color(3, 34, 65, 250));
+                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
+                nextLevelButton.setForeground(Color.WHITE);
+                nextLevelButton.setBounds(400, 435, 185, 42);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nextLevelButton.setBackground(new Color(9, 44, 82, 250));
+                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
+                nextLevelButton.setBounds(390, 430, 200, 50);
             }
         });
 

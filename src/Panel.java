@@ -108,6 +108,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                     placedShips.add(ship);
                     placed = true;
                 }
+                requestFocusInWindow();
             }
         }
         gameState = GameState.FiringShots;
