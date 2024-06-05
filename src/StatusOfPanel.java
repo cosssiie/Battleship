@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class StatusOfPanel extends JPanel {
 
-    private final Font font = new Font("Arial", Font.BOLD, 20);
+    private final Font font = new Font("Arial", Font.BOLD, 19);
     private final String placingShipLine1 = "Place your Ships on the right!";
     private final String placingShipLine2 = "Z to rotate.";
     private final String gameOverLossLine = "Game Over! You Lost :(";

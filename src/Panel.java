@@ -168,7 +168,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
         if(!computer.isPositionMarked(targetPosition)) {
-            Menu.playSounds(SHOT_SOUND_PATH); // Play sound when player fires
+//            Menu.playSounds(SHOT_SOUND_PATH); // Play sound when player fires
             doPlayerTurn(targetPosition);
 
             if (Menu.autoPlaceButton.isEnabled()) {
@@ -192,7 +192,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if(computer.areAllShipsDestroyed()) {
             gameState = GameState.GameOver;
             statusPanel.setTopLine("You won!");
-            statusPanel.setBottomLine("<html>Press R to restart</html>");
+            statusPanel.setBottomLine("Press R to restart or\n \"Next level\"");
             Menu.nextLevelButton.setVisible(true);
             repaint();
         }

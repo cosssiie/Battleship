@@ -58,7 +58,7 @@ public class Menu extends JFrame {
 
         add(imagePanel);
 
-        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
+//        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
 
         setVisible(true);
     }
@@ -101,7 +101,7 @@ public class Menu extends JFrame {
 
     private void startGame(int difficultyChoice) {
         stopMusic(menuMusicClip);
-        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
+//        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
 
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -153,7 +153,7 @@ public class Menu extends JFrame {
         nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
         nextLevelButton.setForeground(Color.WHITE);
         nextLevelButton.setBounds(400, 430, 200, 50);
-        nextLevelButton.setVisible(true);
+        nextLevelButton.setVisible(false);
         gamePanel.add(nextLevelButton);
 
         nextLevelButton.addActionListener(new ActionListener() {
