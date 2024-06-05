@@ -106,7 +106,7 @@ public class Menu extends JFrame {
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
-        gameFrame.setSize(680, 550); // Зменшимо розмір вікна гри
+        gameFrame.setSize(680, 480);
         gameFrame.setLocationRelativeTo(null);
         JLabel easyLevel = new JLabel("Easy level");
         easyLevel.setBounds(270, 0, 200, 30);
@@ -152,7 +152,7 @@ public class Menu extends JFrame {
         nextLevelButton.setBackground(new Color(9, 44, 82, 250));
         nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
         nextLevelButton.setForeground(Color.WHITE);
-        nextLevelButton.setBounds(400, 430, 200, 50);
+        nextLevelButton.setBounds(400, 400, 200, 50);
         nextLevelButton.setVisible(false);
         gamePanel.add(nextLevelButton);
 
@@ -172,14 +172,14 @@ public class Menu extends JFrame {
                 nextLevelButton.setBackground(new Color(4, 29, 56, 250));
                 nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
                 nextLevelButton.setForeground(Color.WHITE);
-                nextLevelButton.setBounds(410, 435, 185, 42);
+                nextLevelButton.setBounds(410, 400, 185, 42);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 nextLevelButton.setBackground(new Color(9, 44, 82, 250));
                 nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
-                nextLevelButton.setBounds(400, 430, 200, 50);
+                nextLevelButton.setBounds(400, 400, 200, 50);
             }
         });
 
