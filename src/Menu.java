@@ -17,7 +17,7 @@ public class Menu extends JFrame {
     public static JButton nextLevelButton;
 
     public Menu(String name) {
-        setSize(600, 600); // Зменшимо розмір вікна
+        setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -56,27 +56,9 @@ public class Menu extends JFrame {
 
         imagePanel.add(startButton);
 
-        nextLevelButton = new RoundedButton("Next Level");
-        nextLevelButton.setBackground(new Color(255, 255, 255, 250));
-        nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
-        nextLevelButton.setForeground(Color.BLACK);
-        nextLevelButton.setBounds(200, 530, 200, 50);
-        nextLevelButton.setVisible(false);
-        nextLevelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Наступний рівень!");
-                if (gamePanel != null) {
-                    gamePanel.nextLevel();
-                }
-            }
-        });
-
-        imagePanel.add(nextLevelButton);
-
         add(imagePanel);
 
-        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
+//        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
 
         setVisible(true);
     }
@@ -105,12 +87,12 @@ public class Menu extends JFrame {
 
     private void startGame(int difficultyChoice) {
         stopMusic(menuMusicClip);
-        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
+//        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
 
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
-        gameFrame.setSize(680, 500); // Зменшимо розмір вікна гри
+        gameFrame.setSize(680, 550); // Зменшимо розмір вікна гри
         gameFrame.setLocationRelativeTo(null);
         JLabel easyLevel = new JLabel("Easy level");
         easyLevel.setBounds(270, 0, 200, 30);
@@ -123,7 +105,7 @@ public class Menu extends JFrame {
         autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
         autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
         autoPlaceButton.setForeground(Color.WHITE);
-        autoPlaceButton.setBounds(400, 400, 200, 50); // Піднімаємо кнопку вище
+        autoPlaceButton.setBounds(400, 350, 200, 50);
         autoPlaceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,6 +115,25 @@ public class Menu extends JFrame {
         gamePanel.add(easyLevel);
         gamePanel.add(autoPlaceButton);
         gameFrame.setVisible(true);
+
+
+        nextLevelButton = new RoundedButton("Next Level");
+        nextLevelButton.setBackground(new Color(9, 44, 82, 250));
+        nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
+        nextLevelButton.setForeground(Color.WHITE);
+        nextLevelButton.setBounds(400, 430, 200, 50);
+        nextLevelButton.setVisible(true);
+        gamePanel.add(nextLevelButton);
+
+        nextLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Наступний рівень!");
+                if (gamePanel != null) {
+                    startGame(1);
+                }
+            }
+        });
 
         this.dispose();
     }

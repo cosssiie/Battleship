@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
-    private StatusOfPanel statusPanel;
+    public StatusOfPanel statusPanel;
     private Selection computer;
     private Selection player;
     private Battleship aiController;
@@ -17,7 +17,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     public static boolean debugModeActive;
     private ArrayList<Ship> placedShips;
     private int difficultyChoice;
-    private JButton nextLevelButton;
 
     public Panel(int aiChoice) {
         this.difficultyChoice = aiChoice;
@@ -37,13 +36,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
 
         statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
-        statusPanel.setBounds(10, player.getHeight() + 50, 500, 80);
+        statusPanel.setBounds(10, player.getHeight() + 50, 300, 120);
         add(statusPanel);
 
-        nextLevelButton = Menu.nextLevelButton;
-        nextLevelButton.setBounds(10, player.getHeight() + 130, 200, 50);
-        nextLevelButton.setVisible(false);
-        add(nextLevelButton);
 
         restart();
 
@@ -60,8 +55,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                     repaint();
                 } else if (e.getKeyCode() == KeyEvent.VK_R && gameState == GameState.GameOver) {
                     restart();
-                } else if (e.getKeyCode() == KeyEvent.VK_N && gameState == GameState.GameOver) {
-                    nextLevel();
                 }
             }
         };
@@ -77,7 +70,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         } else if (difficultyChoice == 1) {
             difficultyChoice = 2;
         }
-        nextLevelButton.setVisible(false);
+        Menu.nextLevelButton.setVisible(false);
         restart();
     }
 
@@ -193,7 +186,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if(computer.areAllShipsDestroyed()) {
             gameState = GameState.GameOver;
             statusPanel.setTopLine("You won!");
-            statusPanel.setBottomLine("<html>Press R to restart.<br>Press N to go to next level.</html>");
+            statusPanel.setBottomLine("<html>Press R to restart</html>");
             Menu.nextLevelButton.setVisible(true);
             repaint();
         }

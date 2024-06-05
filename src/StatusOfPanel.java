@@ -37,7 +37,7 @@ public class StatusOfPanel extends JPanel {
 
     public void showGameOver(boolean playerWon) {
         setTopLine(playerWon ? gameOverWinLine : gameOverLossLine);
-        setBottomLine(playerWon ? "<html>Press R to restart.<br>Press N to go to next level.</html>" : gameOverBottomLine);
+        setBottomLine(playerWon ? "<html>Press R to restart</html>" : gameOverBottomLine);
     }
 
     public void setTopLine(String message) {
