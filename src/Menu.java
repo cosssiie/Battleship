@@ -118,14 +118,14 @@ public class Menu extends JFrame {
             public void mouseEntered(MouseEvent e) {
                 autoPlaceButton.setBackground(new Color(9, 52, 152, 179));
                 autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 18));
-                autoPlaceButton.setBounds(400, 350,  185, 42);
+                autoPlaceButton.setBounds(410, 350,  185, 42);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
                 autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
-                autoPlaceButton.setBounds(390, 345, 200, 50);
+                autoPlaceButton.setBounds(400, 345, 200, 50);
             }
         });
 
@@ -158,14 +158,14 @@ public class Menu extends JFrame {
                 nextLevelButton.setBackground(new Color(3, 34, 65, 250));
                 nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
                 nextLevelButton.setForeground(Color.WHITE);
-                nextLevelButton.setBounds(400, 435, 185, 42);
+                nextLevelButton.setBounds(410, 435, 185, 42);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 nextLevelButton.setBackground(new Color(9, 44, 82, 250));
                 nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
-                nextLevelButton.setBounds(390, 430, 200, 50);
+                nextLevelButton.setBounds(400, 430, 200, 50);
             }
         });
 
