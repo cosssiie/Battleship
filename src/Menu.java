@@ -58,18 +58,32 @@ public class Menu extends JFrame {
 
         add(imagePanel);
 
-//        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
+        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
 
         setVisible(true);
     }
 
-    private Clip playBackgroundMusic(String audioPath) {
+    public static Clip playBackgroundMusic(String audioPath) {
         try {
             File audioFile = new File(audioPath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+            return clip;
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Clip playSounds(String audioPath) {
+        try {
+            File audioFile = new File(audioPath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
             clip.start();
             return clip;
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -87,7 +101,7 @@ public class Menu extends JFrame {
 
     private void startGame(int difficultyChoice) {
         stopMusic(menuMusicClip);
-//        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
+        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
 
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

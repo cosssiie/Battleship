@@ -1,6 +1,9 @@
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
@@ -17,6 +20,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     public static boolean debugModeActive;
     private ArrayList<Ship> placedShips;
     private int difficultyChoice;
+
+    private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
 
     public Panel(int aiChoice) {
         this.difficultyChoice = aiChoice;
@@ -38,7 +43,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
         statusPanel.setBounds(10, player.getHeight() + 50, 300, 120);
         add(statusPanel);
-
 
         restart();
 
@@ -164,6 +168,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
         if(!computer.isPositionMarked(targetPosition)) {
+            Menu.playSounds(SHOT_SOUND_PATH); // Play sound when player fires
             doPlayerTurn(targetPosition);
 
             if (Menu.autoPlaceButton.isEnabled()) {
