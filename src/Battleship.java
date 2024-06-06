@@ -21,8 +21,8 @@ public class Battleship {
     
     private void createValidMoveList() {
         validMoves = new ArrayList<>();
-        for(int x = 0; x < Selection.GRID_WIDTH; x++) {
-            for(int y = 0; y < Selection.GRID_HEIGHT; y++) {
+        for(int x = 0; x < Selection.gridWidth; x++) {
+            for(int y = 0; y < Selection.gridHeight; y++) {
                 validMoves.add(new PositionXY(x,y));
             }
         }

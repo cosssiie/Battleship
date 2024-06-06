@@ -16,6 +16,8 @@ public class Menu extends JFrame {
     public static JButton autoPlaceButton;
     public static JButton nextLevelButton;
 
+    private JLabel levelLabel;
+
     public Menu(String name) {
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,10 +36,9 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Легкий рівень гри почався!");
-                startGame(0);
+                easyLevel(0);
             }
         });
-
         startButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -54,25 +55,115 @@ public class Menu extends JFrame {
             }
         });
 
+        imagePanel.add(startButton);
+        add(imagePanel);
+        setVisible(true);
+    }
+
+    private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
+        levelLabel = new JLabel(levelText);
+        levelLabel.setBounds((gameFrame.getWidth() - 200) / 2, 0, 200, 30);
+        levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY);
+        gamePanel.setLayout(null);
+        gameFrame.getContentPane().add(gamePanel);
+
         autoPlaceButton = new RoundedButton("Auto Place Ships");
         autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
         autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
         autoPlaceButton.setForeground(Color.WHITE);
-        autoPlaceButton.setBounds(400, 350, 200, 50);
-        autoPlaceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        autoPlaceButton.setBounds(autoPlaceX, autoPlaceY, 200, 50);
+        autoPlaceButton.addActionListener(e -> {
+            System.out.println("Кнопка");
+            if (gamePanel != null) {
                 gamePanel.autoPlaceShips();
             }
         });
 
-        imagePanel.add(startButton);
+        autoPlaceButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                autoPlaceButton.setBackground(new Color(8, 49, 131, 182));
+                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 18));
+                autoPlaceButton.setBounds(autoPlaceX + 10, autoPlaceY + 5, 185, 42);
+            }
 
-        add(imagePanel);
+            @Override
+            public void mouseExited(MouseEvent e) {
+                autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
+                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
+                autoPlaceButton.setBounds(autoPlaceX, autoPlaceY, 200, 50);
+            }
+        });
 
-//        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
+        gamePanel.add(levelLabel);
+        gamePanel.add(autoPlaceButton);
 
-        setVisible(true);
+        nextLevelButton = new RoundedButton("Next Level");
+        nextLevelButton.setBackground(new Color(9, 44, 82, 250));
+        nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
+        nextLevelButton.setForeground(Color.WHITE);
+        nextLevelButton.setBounds(nextLevelX, nextLevelY, 200, 50);
+        nextLevelButton.setVisible(false);
+        gamePanel.add(nextLevelButton);
+
+        nextLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Наступний рівень!");
+                if (gamePanel != null) {
+                    gameFrame.dispose();
+                    if (difficultyChoice == 0) {
+                        mediumLevel(1);
+                    } else {
+                        hardLevel(2);
+                    }
+                }
+            }
+        });
+
+        nextLevelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nextLevelButton.setBackground(new Color(4, 29, 56, 250));
+                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
+                nextLevelButton.setForeground(Color.WHITE);
+                nextLevelButton.setBounds(nextLevelX + 10, nextLevelY + 5, 185, 42);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nextLevelButton.setBackground(new Color(9, 44, 82, 250));
+                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
+                nextLevelButton.setBounds(nextLevelX, nextLevelY, 200, 50);
+            }
+        });
+
+        gameFrame.setVisible(true);
+        this.dispose();
+    }
+
+    private void easyLevel(int difficultyChoice) {
+        stopMusic(menuMusicClip);
+        JFrame gameFrame = new JFrame("Battleship");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setResizable(false);
+        gameFrame.setSize(680, 550);
+        gameFrame.setLocationRelativeTo(null);
+        initLevel(gameFrame, "Easy Level", difficultyChoice, 10, 10, 400, 350, 400, 430);
+    }
+
+    private void mediumLevel(int difficultyChoice) {
+        JFrame gameFrame = new JFrame("Battleship");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setResizable(false);
+        gameFrame.setSize(860, 650);
+        gameFrame.setLocationRelativeTo(null);
+        initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 450, 550, 520);
+    }
+
+    private void hardLevel(int difficultyChoice) {
     }
 
     public static Clip playBackgroundMusic(String audioPath) {
@@ -109,82 +200,6 @@ public class Menu extends JFrame {
             clip.stop();
             clip.close();
         }
-    }
-
-    private void startGame(int difficultyChoice) {
-        stopMusic(menuMusicClip);
-//        Clip gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
-
-        JFrame gameFrame = new JFrame("Battleship");
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setResizable(false);
-        gameFrame.setSize(680, 550);
-        gameFrame.setLocationRelativeTo(null);
-        JLabel easyLevel = new JLabel("Easy level");
-        easyLevel.setBounds(270, 0, 200, 30);
-        easyLevel.setFont(new Font("Arial", Font.BOLD, 24));
-        gamePanel = new Panel(difficultyChoice);
-        gamePanel.setLayout(null);
-        gameFrame.getContentPane().add(gamePanel);
-
-
-        autoPlaceButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                autoPlaceButton.setBackground(new Color(8, 49, 131, 182));
-                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 18));
-                autoPlaceButton.setBounds(410, 355,  185, 42);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
-                autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
-                autoPlaceButton.setBounds(400, 350, 200, 50);
-            }
-        });
-
-        gamePanel.add(easyLevel);
-        gamePanel.add(autoPlaceButton);
-        gameFrame.setVisible(true);
-
-
-        nextLevelButton = new RoundedButton("Next Level");
-        nextLevelButton.setBackground(new Color(9, 44, 82, 250));
-        nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
-        nextLevelButton.setForeground(Color.WHITE);
-        nextLevelButton.setBounds(400, 430, 200, 50);
-        nextLevelButton.setVisible(false);
-        gamePanel.add(nextLevelButton);
-
-        nextLevelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Наступний рівень!");
-                if (gamePanel != null) {
-                    startGame(1);
-                }
-            }
-        });
-
-        nextLevelButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                nextLevelButton.setBackground(new Color(4, 29, 56, 250));
-                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 18));
-                nextLevelButton.setForeground(Color.WHITE);
-                nextLevelButton.setBounds(410, 435, 185, 42);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                nextLevelButton.setBackground(new Color(9, 44, 82, 250));
-                nextLevelButton.setFont(new Font("Arial", Font.BOLD, 20));
-                nextLevelButton.setBounds(400, 430, 200, 50);
-            }
-        });
-
-        this.dispose();
     }
 
     private class ImagePanel extends JPanel {

@@ -1,9 +1,6 @@
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
@@ -23,10 +20,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
 
     private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
 
-    public Panel(int aiChoice) {
+    public Panel(int aiChoice, int gridWidth, int gridHeight) {
         this.difficultyChoice = aiChoice;
-        computer = new Selection(10, 30);
-        player = new Selection(computer.getWidth() + 50, 30);
+        computer = new Selection(10, 30, gridWidth, gridHeight);
+        player = new Selection(computer.getWidth() + 50, 30, gridWidth, gridHeight);
         placedShips = new ArrayList<>();
         setBackground(new Color(255, 255, 255));
         setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 150));
@@ -36,13 +33,17 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
 
         if (aiChoice == 0) {
             aiController = new SimpleRandom(player);
+            statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
+            statusPanel.setBounds(10, player.getHeight() + 50, Selection.CELL_SIZE * gridWidth, 120);
+            add(statusPanel);
         } else {
             aiController = new Smarter(player, aiChoice == 2, aiChoice == 2);
+            statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
+            statusPanel.setBounds(10, player.getHeight() + 50, Selection.CELL_SIZE * gridWidth, 120);
+            add(statusPanel);
         }
 
-        statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
-        statusPanel.setBounds(10, player.getHeight() + 50, 300, 120);
-        add(statusPanel);
+
 
         restart();
 
@@ -103,8 +104,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             boolean placed = false;
             while (!placed) {
                 boolean sideways = Math.random() < 0.5;
-                int x = (int) (Math.random() * (sideways ? Selection.GRID_WIDTH - Selection.BOAT_SIZES[i] : Selection.GRID_WIDTH));
-                int y = (int) (Math.random() * (!sideways ? Selection.GRID_HEIGHT - Selection.BOAT_SIZES[i] : Selection.GRID_HEIGHT));
+                int x = (int) (Math.random() * (sideways ? Selection.gridWidth - Selection.BOAT_SIZES[i] : Selection.gridWidth));
+                int y = (int) (Math.random() * (!sideways ? Selection.gridHeight - Selection.BOAT_SIZES[i] : Selection.gridHeight));
 
                 if (player.canPlaceShipWithGap(x, y, Selection.BOAT_SIZES[i], sideways)) {
                     Ship ship = new Ship(new PositionXY(x, y),
@@ -140,12 +141,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         debugModeActive = false;
         statusPanel.reset();
         gameState = GameState.PlacingShips;
-
-        Menu.autoPlaceButton.setEnabled(true);
-        requestFocusInWindow();
-        repaint();
     }
-
 
     private void tryPlaceShip(PositionXY mousePosition) {
         PositionXY targetPosition = player.getPositionInGrid(mousePosition.x, mousePosition.y);
@@ -230,9 +226,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
 
     private void updateShipPlacement(PositionXY targetPos) {
         if(placingShip.isSideways()) {
-            targetPos.x = Math.min(targetPos.x, Selection.GRID_WIDTH - Selection.BOAT_SIZES[placingShipIndex]);
+            targetPos.x = Math.min(targetPos.x, Selection.gridWidth - Selection.BOAT_SIZES[placingShipIndex]);
         } else {
-            targetPos.y = Math.min(targetPos.y, Selection.GRID_HEIGHT - Selection.BOAT_SIZES[placingShipIndex]);
+            targetPos.y = Math.min(targetPos.y, Selection.gridHeight - Selection.BOAT_SIZES[placingShipIndex]);
         }
         placingShip.setDrawPosition(new PositionXY(targetPos),
                 new PositionXY(player.getPosition().x + targetPos.x * Selection.CELL_SIZE,

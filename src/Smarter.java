@@ -146,7 +146,7 @@ public class Smarter extends Battleship{
             left.add(PositionXY.LEFT);
             result.add(left);
         }
-        if(position.x != Selection.GRID_WIDTH-1) {
+        if(position.x != Selection.gridWidth -1) {
             PositionXY right = new PositionXY(position);
             right.add(PositionXY.RIGHT);
             result.add(right);
@@ -156,7 +156,7 @@ public class Smarter extends Battleship{
             up.add(PositionXY.UP);
             result.add(up);
         }
-        if(position.y != Selection.GRID_HEIGHT-1) {
+        if(position.y != Selection.gridHeight -1) {
             PositionXY down = new PositionXY(position);
             down.add(PositionXY.DOWN);
             result.add(down);
