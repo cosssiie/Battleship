@@ -8,7 +8,7 @@ public class Selection extends Rectangle {
     public static final int CELL_SIZE = 30;
     public static final int GRID_WIDTH = 10;
     public static final int GRID_HEIGHT = 10;
-    public static final int[] BOAT_SIZES = {5, 4,3 ,3, 2};
+    public static final int[] BOAT_SIZES = {2};
 
     private Marker[][] markers = new Marker[GRID_WIDTH][GRID_HEIGHT];
     private List<Ship> ships;

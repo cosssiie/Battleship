@@ -140,7 +140,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         debugModeActive = false;
         statusPanel.reset();
         gameState = GameState.PlacingShips;
+
+        Menu.autoPlaceButton.setEnabled(true);
+        requestFocusInWindow();
+        repaint();
     }
+
 
     private void tryPlaceShip(PositionXY mousePosition) {
         PositionXY targetPosition = player.getPositionInGrid(mousePosition.x, mousePosition.y);

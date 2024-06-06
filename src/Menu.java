@@ -54,6 +54,18 @@ public class Menu extends JFrame {
             }
         });
 
+        autoPlaceButton = new RoundedButton("Auto Place Ships");
+        autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
+        autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
+        autoPlaceButton.setForeground(Color.WHITE);
+        autoPlaceButton.setBounds(400, 350, 200, 50);
+        autoPlaceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePanel.autoPlaceShips();
+            }
+        });
+
         imagePanel.add(startButton);
 
         add(imagePanel);
@@ -115,17 +127,6 @@ public class Menu extends JFrame {
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
 
-        autoPlaceButton = new RoundedButton("Auto Place Ships");
-        autoPlaceButton.setBackground(new Color(19, 80, 217, 179));
-        autoPlaceButton.setFont(new Font("Arial", Font.BOLD, 20));
-        autoPlaceButton.setForeground(Color.WHITE);
-        autoPlaceButton.setBounds(400, 350, 200, 50);
-        autoPlaceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gamePanel.autoPlaceShips();
-            }
-        });
 
         autoPlaceButton.addMouseListener(new MouseAdapter() {
             @Override
