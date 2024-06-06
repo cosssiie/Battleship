@@ -27,11 +27,6 @@ public class PositionXY {
     }
 
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public void add(PositionXY otherPosition) {
         this.x += otherPosition.x;
         this.y += otherPosition.y;
