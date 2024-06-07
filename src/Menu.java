@@ -176,6 +176,14 @@ public class Menu extends JFrame {
     }
 
     private void hardLevel(int difficultyChoice) {
+        JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
+        JFrame gameFrame = new JFrame("Battleship");
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setResizable(false);
+        gameFrame.setSize(1060, 730);
+        gameFrame.setLocationRelativeTo(null);
+        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 600, 570, 600, 640);
+
     }
 
 
