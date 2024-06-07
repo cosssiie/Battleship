@@ -34,16 +34,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if (aiChoice == 0) {
             aiController = new SimpleRandom(player);
             statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
-            statusPanel.setBounds(10, player.getHeight() + 50, Selection.CELL_SIZE * gridWidth, 120);
+            statusPanel.setBounds(10, player.getHeight() + 80, Selection.CELL_SIZE * gridWidth, 120);
             add(statusPanel);
         } else {
             aiController = new Smarter(player, aiChoice == 2, aiChoice == 2);
             statusPanel = new StatusOfPanel(new PositionXY(0, computer.getHeight() + 1), computer.getWidth(), 80);
-            statusPanel.setBounds(10, player.getHeight() + 50, Selection.CELL_SIZE * gridWidth, 120);
+            statusPanel.setBounds(10, player.getHeight() + 80, Selection.CELL_SIZE * gridWidth, 120);
             add(statusPanel);
         }
-
-
 
         restart();
 

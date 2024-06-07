@@ -155,9 +155,9 @@ public class Menu extends JFrame {
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
-        gameFrame.setSize(680, 550);
+        gameFrame.setSize(680, 570);
         gameFrame.setLocationRelativeTo(null);
-        initLevel(gameFrame, "Easy Level", difficultyChoice, 10, 10, 400, 350, 400, 430);
+        initLevel(gameFrame, "Easy Level", difficultyChoice, 10, 10, 400, 390, 400, 460);
     }
 
     private void mediumLevel(int difficultyChoice) {
@@ -167,7 +167,7 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(860, 650);
         gameFrame.setLocationRelativeTo(null);
-        initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 450, 550, 520);
+        initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 480, 550, 550);
 
         playerMovesLabel = new JLabel("Player Moves: " + playerMoves);
         playerMovesLabel.setBounds(10, 10, 200, 30);
