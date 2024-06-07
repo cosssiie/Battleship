@@ -17,6 +17,12 @@ public class Menu extends JFrame {
     public static JButton nextLevelButton;
 
     private JLabel levelLabel;
+    private JLabel playerMovesLabel;
+    private JLabel aiMovesLabel;
+    private static final int MEDIUM_LEVEL_MAX_MOVES = 40;
+    private int playerMoves;
+    private int aiMoves;
+
 
     public Menu(String name) {
         setSize(600, 600);
@@ -62,7 +68,7 @@ public class Menu extends JFrame {
 
     private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
         levelLabel = new JLabel(levelText);
-        levelLabel.setBounds((gameFrame.getWidth() - 200) / 2, 0, 200, 30);
+        levelLabel.setBounds((gameFrame.getWidth() - 200) / 2, 15, 200, 30);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY);
@@ -155,12 +161,52 @@ public class Menu extends JFrame {
     }
 
     private void mediumLevel(int difficultyChoice) {
+        JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
         gameFrame.setSize(860, 650);
         gameFrame.setLocationRelativeTo(null);
         initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 450, 550, 520);
+
+        playerMovesLabel = new JLabel("Player Moves: " + playerMoves);
+        playerMovesLabel.setBounds(10, 10, 200, 30);
+        playerMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        aiMovesLabel = new JLabel("AI Moves: " + aiMoves);
+        aiMovesLabel.setBounds(10, 40, 200, 30);
+        aiMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        gamePanel.add(levelLabel);
+        gamePanel.add(autoPlaceButton);
+        gamePanel.add(playerMovesLabel);
+        gamePanel.add(aiMovesLabel);
+
+        // Ініціалізація кількості ходів
+        playerMoves = 0;
+        aiMoves = 0;
+
+        // Додаємо слухачів для рахунку ходів
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Логіка для ходу гравця
+                if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                    playerMoves++;
+                    playerMovesLabel.setText("Player Moves: " + playerMoves);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Max player moves reached.");
+                }
+
+                // Логіка для ходу AI
+                if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                    aiMoves++;
+                    aiMovesLabel.setText("AI Moves: " + aiMoves);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Max AI moves reached.");
+                }
+            }
+        });
     }
 
     private void hardLevel(int difficultyChoice) {

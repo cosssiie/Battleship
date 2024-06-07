@@ -22,8 +22,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
 
     public Panel(int aiChoice, int gridWidth, int gridHeight) {
         this.difficultyChoice = aiChoice;
-        computer = new Selection(10, 30, gridWidth, gridHeight);
-        player = new Selection(computer.getWidth() + 50, 30, gridWidth, gridHeight);
+        computer = new Selection(10, 70, gridWidth, gridHeight);
+        player = new Selection(computer.getWidth() + 50, 70, gridWidth, gridHeight);
         placedShips = new ArrayList<>();
         setBackground(new Color(255, 255, 255));
         setPreferredSize(new Dimension(computer.getWidth() + player.getWidth() + 60, player.getHeight() + 150));
