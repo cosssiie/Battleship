@@ -67,14 +67,12 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         requestFocusInWindow();
     }
 
-    public void nextLevel() {
-        if (difficultyChoice == 0) {
-            difficultyChoice = 1;
-        } else if (difficultyChoice == 1) {
-            difficultyChoice = 2;
-        }
-        Menu.nextLevelButton.setVisible(false);
-        restart();
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public Selection getComputer() {
+        return computer;
     }
 
     @Override

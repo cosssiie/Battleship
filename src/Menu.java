@@ -19,7 +19,7 @@ public class Menu extends JFrame {
     private JLabel levelLabel;
     private JLabel playerMovesLabel;
     private JLabel aiMovesLabel;
-    private static final int MEDIUM_LEVEL_MAX_MOVES = 40;
+    private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
     private int playerMoves;
     private int aiMoves;
 
@@ -169,6 +169,16 @@ public class Menu extends JFrame {
         gameFrame.setLocationRelativeTo(null);
         initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 480, 550, 550);
 
+        counterMoves();
+    }
+
+    private void hardLevel(int difficultyChoice) {
+    }
+
+
+    //метод-лічильник кроків
+    public void counterMoves(){
+
         playerMovesLabel = new JLabel("Player Moves: " + playerMoves);
         playerMovesLabel.setBounds(10, 10, 200, 30);
         playerMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -177,8 +187,6 @@ public class Menu extends JFrame {
         aiMovesLabel.setBounds(10, 40, 200, 30);
         aiMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
-        gamePanel.add(levelLabel);
-        gamePanel.add(autoPlaceButton);
         gamePanel.add(playerMovesLabel);
         gamePanel.add(aiMovesLabel);
 
@@ -190,26 +198,24 @@ public class Menu extends JFrame {
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Логіка для ходу гравця
-                if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                    playerMoves++;
-                    playerMovesLabel.setText("Player Moves: " + playerMoves);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Max player moves reached.");
-                }
+                PositionXY mousePosition = new PositionXY(e.getX(), e.getY());
 
-                // Логіка для ходу AI
-                if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                    aiMoves++;
-                    aiMovesLabel.setText("AI Moves: " + aiMoves);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Max AI moves reached.");
+                if (gamePanel.getGameState() == Panel.GameState.FiringShots && gamePanel.getComputer().isPositionInside(mousePosition)) {
+                    // Логіка для хода гравця
+                    if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                        playerMoves++;
+                        playerMovesLabel.setText("Player Moves: " + playerMoves);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Max moves reached.");
+                    }
+                    // Логіка для хода AI
+                    if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                        aiMoves++;
+                        aiMovesLabel.setText("AI Moves: " + aiMoves);
+                    }
                 }
             }
         });
-    }
-
-    private void hardLevel(int difficultyChoice) {
     }
 
     public static Clip playBackgroundMusic(String audioPath) {
