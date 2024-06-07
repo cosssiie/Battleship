@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship//mainMenuMusic.wav";
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
+    private static final String IMAGE_WAVES = "Battleship//waves.jpeg";
     private Clip menuMusicClip;
     private Panel gamePanel;
     public static JButton autoPlaceButton;
@@ -219,16 +221,18 @@ public class Menu extends JFrame {
                             playerMoves++;
                             playerMovesLabel.setText("Player Moves: " + playerMoves);
                             playerMovesSet.add(positionKey);
+
+                            // Логіка для ходу AI
+                            if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                                aiMoves++;
+                                aiMovesLabel.setText("AI Moves: " + aiMoves);
+                            }
                         } else {
                             JOptionPane.showMessageDialog(null, "Max moves reached. You lost!");
                             return;
                         }
-                    }
-
-                    // Логіка для ходу AI
-                    if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                        aiMoves++;
-                        aiMovesLabel.setText("AI Moves: " + aiMoves);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You cannot shoot at the same position twice!");
                     }
                 }
             }
