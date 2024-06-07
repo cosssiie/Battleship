@@ -5,7 +5,9 @@ import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.HashSet;
+import java.util.Set;
+import java.awt.Point;
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship//mainMenuMusic.wav";
@@ -23,6 +25,7 @@ public class Menu extends JFrame {
     private int playerMoves;
     private int aiMoves;
 
+    private Set<String> playerMovesSet;
 
     public Menu(String name) {
         setSize(600, 600);
@@ -178,7 +181,6 @@ public class Menu extends JFrame {
 
     //метод-лічильник кроків
     public void counterMoves(){
-
         playerMovesLabel = new JLabel("Player Moves: " + playerMoves);
         playerMovesLabel.setBounds(10, 10, 200, 30);
         playerMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -193,22 +195,29 @@ public class Menu extends JFrame {
         // Ініціалізація кількості ходів
         playerMoves = 0;
         aiMoves = 0;
+        playerMovesSet = new HashSet<>();
 
         // Додаємо слухачів для рахунку ходів
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                PositionXY mousePosition = new PositionXY(e.getX(), e.getY());
+                Point mousePosition = new Point(e.getX(), e.getY());
+                String positionKey = mousePosition.x + "," + mousePosition.y;
 
-                if (gamePanel.getGameState() == Panel.GameState.FiringShots && gamePanel.getComputer().isPositionInside(mousePosition)) {
-                    // Логіка для хода гравця
-                    if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                        playerMoves++;
-                        playerMovesLabel.setText("Player Moves: " + playerMoves);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Max moves reached.");
+                if (gamePanel.getGameState() == Panel.GameState.FiringShots && isPositionInside(mousePosition)) {
+                    if (!playerMovesSet.contains(positionKey)) {
+                        // Логіка для ходу гравця
+                        if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
+                            playerMoves++;
+                            playerMovesLabel.setText("Player Moves: " + playerMoves);
+                            playerMovesSet.add(positionKey);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Max moves reached. You lost!");
+                            return;
+                        }
                     }
-                    // Логіка для хода AI
+
+                    // Логіка для ходу AI
                     if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
                         aiMoves++;
                         aiMovesLabel.setText("AI Moves: " + aiMoves);
@@ -216,6 +225,9 @@ public class Menu extends JFrame {
                 }
             }
         });
+    }
+    public boolean isPositionInside(Point point) {
+        return point.x >= 0 && point.x < gamePanel.getWidth() && point.y >= 0 && point.y < gamePanel.getHeight();
     }
 
     public static Clip playBackgroundMusic(String audioPath) {
