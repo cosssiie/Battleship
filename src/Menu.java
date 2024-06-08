@@ -156,6 +156,7 @@ public class Menu extends JFrame {
     }
 
     private void easyLevel(int difficultyChoice) {
+        Selection.BOAT_SIZES = new int[]{5, 4, 3, 2, 2};
         stopMusic(menuMusicClip);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -166,6 +167,7 @@ public class Menu extends JFrame {
     }
 
     private void mediumLevel(int difficultyChoice) {
+        Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2};
         JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -178,6 +180,7 @@ public class Menu extends JFrame {
     }
 
     private void hardLevel(int difficultyChoice) {
+        Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2, 2, 1, 1};
         JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
