@@ -71,6 +71,14 @@ public class Menu extends JFrame {
         setVisible(true);
     }
 
+    private void setBackgroundImage(String imagePath) {
+        ImagePanel imagePanel = new ImagePanel(imagePath);
+        setContentPane(imagePanel);
+        imagePanel.setLayout(null);
+        validate();
+        repaint();
+    }
+
     private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
         levelLabel = new JLabel(levelText);
         levelLabel.setBounds((gameFrame.getWidth() - 200) / 2, 15, 200, 30);
@@ -157,6 +165,7 @@ public class Menu extends JFrame {
 
     private void easyLevel(int difficultyChoice) {
         Selection.BOAT_SIZES = new int[]{5, 4, 3, 2, 2};
+        setBackgroundImage("Battleship//waves.jpeg");
         stopMusic(menuMusicClip);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -168,6 +177,7 @@ public class Menu extends JFrame {
 
     private void mediumLevel(int difficultyChoice) {
         Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2};
+        setBackgroundImage("Battleship//waves.jpeg");
         JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -181,14 +191,17 @@ public class Menu extends JFrame {
 
     private void hardLevel(int difficultyChoice) {
         Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2, 2, 1, 1};
+        setBackgroundImage("Battleship//waves.jpeg");
         JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
         gameFrame.setSize(1060, 730);
         gameFrame.setLocationRelativeTo(null);
+        gamePanel = new Panel(difficultyChoice, 15, 15); // Передаємо параметр складності
+        gamePanel.setLayout(null);
+        gameFrame.getContentPane().add(gamePanel);
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 600, 570, 600, 640);
-
     }
 
 
@@ -241,6 +254,7 @@ public class Menu extends JFrame {
             }
         });
     }
+
     public boolean isPositionInside(Point point) {
         return point.x >= 0 && point.x < gamePanel.getWidth() && point.y >= 0 && point.y < gamePanel.getHeight();
     }

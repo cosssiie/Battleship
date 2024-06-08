@@ -2,7 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+import java.util.Random;
+import javax.swing.JPanel;
+import java.util.List;
+import javax.swing.Timer;
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
@@ -17,6 +20,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     public static boolean debugModeActive;
     private ArrayList<Ship> placedShips;
     private int difficultyChoice;
+    private static final int CELL_SIZE = 30;
+    private boolean[][] fogCells;
+    private boolean[][] rainCells;
+    private boolean[][] hitCells;
+
+    private List<Cloud> clouds;
+    private List<Raindrop> raindrops;
+    private Timer animationTimer;
 
     private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
 
@@ -65,6 +76,165 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         addKeyListener(keyAdapter);
         setFocusable(true);
         requestFocusInWindow();
+        fogCells = new boolean[gridWidth][gridHeight];
+        rainCells = new boolean[gridWidth][gridHeight];
+        hitCells = new boolean[gridWidth][gridHeight];
+
+        clouds = new ArrayList<>();
+        raindrops = new ArrayList<>();
+
+        if (difficultyChoice == 2) { // Складний рівень
+            generateFogAndRain();
+            generateCloudsAndRain();
+        }
+
+        animationTimer = new Timer(100, e -> updateAnimation());
+        animationTimer.start();
+    }
+    private void generateFogAndRain() {
+        Random rand = new Random();
+        for (int i = 0; i < fogCells.length; i++) {
+            for (int j = 0; j < fogCells[i].length; j++) {
+                if (rand.nextDouble() < 0.1) { // 10% ймовірність туману
+                    fogCells[i][j] = true;
+                }
+                if (rand.nextDouble() < 0.1) { // 10% ймовірність дощу
+                    rainCells[i][j] = true;
+                }
+            }
+        }
+    }
+
+    private void generateCloudsAndRain() {
+        Random rand = new Random();
+        int width = getWidth();
+        int height = getHeight();
+
+        for (int i = 0; i < 10; i++) { // Генеруємо 10 хмаринок
+            clouds.add(new Cloud(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height / 2)), rand.nextInt(2) + 1));
+        }
+        for (int i = 0; i < 100; i++) { // Генеруємо 100 крапель дощу
+            raindrops.add(new Raindrop(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height)), rand.nextInt(5) + 5));
+        }
+    }
+
+    private void updateAnimation() {
+        for (Cloud cloud : clouds) {
+            cloud.move();
+        }
+        for (Raindrop raindrop : raindrops) {
+            raindrop.fall();
+        }
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        // Ваш існуючий код малювання...
+
+        drawFogAndRain(g);
+        drawClouds(g);
+        drawRaindrops(g);
+    }
+
+    private void drawFogAndRain(Graphics g) {
+        g.setColor(new Color(192, 192, 192, 128)); // Напівпрозорий сірий для туману
+        for (int i = 0; i < fogCells.length; i++) {
+            for (int j = 0; j < fogCells[i].length; j++) {
+                if (fogCells[i][j]) {
+                    g.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                }
+            }
+        }
+
+        g.setColor(new Color(0, 0, 255, 128)); // Напівпрозорий синій для дощу
+        for (int i = 0; i < rainCells.length; i++) {
+            for (int j = 0; j < rainCells[i].length; j++) {
+                if (rainCells[i][j]) {
+                    g.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                }
+            }
+        }
+    }
+
+    private void drawClouds(Graphics g) {
+        g.setColor(new Color(200, 200, 200, 180)); // Напівпрозорий сірий для хмар
+        for (Cloud cloud : clouds) {
+            g.fillOval(cloud.x, cloud.y, 60, 30);
+        }
+    }
+
+    private void drawRaindrops(Graphics g) {
+        g.setColor(new Color(0, 0, 255, 180)); // Напівпрозорий синій для крапель дощу
+        for (Raindrop raindrop : raindrops) {
+            g.fillOval(raindrop.x, raindrop.y, 5, 10);
+        }
+    }
+
+    public boolean isRainCell(int x, int y) {
+        return rainCells[x][y];
+    }
+
+    public void markHit(int x, int y) {
+        hitCells[x][y] = true;
+    }
+
+    public boolean isHit(int x, int y) {
+        return hitCells[x][y];
+    }
+
+    public void markPosition(int x, int y) {
+        if (!isRainCell(x, y)) {
+            markHit(x, y);
+        }
+        repaint();
+    }
+
+    private class Cloud {
+        int x, y, speed;
+        boolean movingRight;
+
+        Cloud(int x, int y, int speed) {
+            this.x = x;
+            this.y = y;
+            this.speed = speed;
+            this.movingRight = new Random().nextBoolean();
+        }
+
+        void move() {
+            if (movingRight) {
+                x += speed;
+                if (x > getWidth()) {
+                    movingRight = false;
+                    x = getWidth();
+                }
+            } else {
+                x -= speed;
+                if (x < -60) {
+                    movingRight = true;
+                    x = -60;
+                }
+            }
+        }
+    }
+
+
+    private class Raindrop {
+        int x, y, speed;
+
+        Raindrop(int x, int y, int speed) {
+            this.x = x;
+            this.y = y;
+            this.speed = speed;
+        }
+
+        void fall() {
+            y += speed;
+            if (y > getHeight()) {
+                y = 0; // Повертаємо краплю дощу зверху
+            }
+        }
     }
 
     public GameState getGameState() {
