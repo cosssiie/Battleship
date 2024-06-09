@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.awt.Point;
@@ -15,19 +16,18 @@ public class Menu extends JFrame {
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
     private static final String IMAGE_WAVES = "Battleship//waves.jpeg";
+    public static HashSet playerMovesSet;
     private Clip menuMusicClip;
     private Panel gamePanel;
     public static JButton autoPlaceButton;
     public static JButton nextLevelButton;
-
     private JLabel levelLabel;
     private JLabel playerMovesLabel;
     private JLabel aiMovesLabel;
     private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
-    private int playerMoves;
-    private int aiMoves;
+    public static int playerMoves;
+    public static int aiMoves;
 
-    private Set<String> playerMovesSet;
 
     public Menu(String name) {
         setSize(600, 640);
@@ -48,6 +48,21 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new Instructions().setVisible(true);
+            }
+        });
+        instructionButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                instructionButton.setBackground(new Color(192, 196, 197));
+                instructionButton.setBounds(210, 535, 185, 42);
+                instructionButton.setFont(new Font("Arial", Font.BOLD, 18));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                instructionButton.setBackground(new Color(255, 255, 255, 250));
+                instructionButton.setFont(new Font("Arial", Font.BOLD, 20));
+                instructionButton.setBounds(200, 530, 200, 50);
             }
         });
 
@@ -178,7 +193,7 @@ public class Menu extends JFrame {
     }
 
     private void easyLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{5, 4, 3, 2, 2};
+        Selection.BOAT_SIZES = new int[]{2};
         setBackgroundImage("Battleship//waves.jpeg");
         stopMusic(menuMusicClip);
         JFrame gameFrame = new JFrame("Battleship");
@@ -190,7 +205,7 @@ public class Menu extends JFrame {
     }
 
     private void mediumLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2};
+        Selection.BOAT_SIZES = new int[]{5};
         setBackgroundImage("Battleship//waves.jpeg");
         JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
@@ -204,7 +219,7 @@ public class Menu extends JFrame {
     }
 
     private void hardLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{5, 4, 3, 3, 2, 2, 2, 2, 1, 1};
+        Selection.BOAT_SIZES = new int[]{2, 2};
         setBackgroundImage("Battleship//waves.jpeg");
         JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
         JFrame gameFrame = new JFrame("Battleship");
@@ -212,7 +227,7 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(1060, 730);
         gameFrame.setLocationRelativeTo(null);
-        gamePanel = new Panel(difficultyChoice, 15, 15); // Передаємо параметр складності
+        gamePanel = new Panel(difficultyChoice, 15, 15);
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 600, 570, 600, 640);
@@ -259,10 +274,7 @@ public class Menu extends JFrame {
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "Max moves reached. You lost!");
-                            return;
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "You cannot shoot at the same position twice!");
                     }
                 }
             }
@@ -270,7 +282,7 @@ public class Menu extends JFrame {
     }
 
     public boolean isPositionInside(Point point) {
-        return point.x >= 0 && point.x < gamePanel.getWidth() && point.y >= 0 && point.y < gamePanel.getHeight();
+        return point.x >= 0 && point.x < gamePanel.getWidth()/2 && point.y >= 0 && point.y < gamePanel.getHeight()/2;
     }
 
     public static Clip playBackgroundMusic(String audioPath) {

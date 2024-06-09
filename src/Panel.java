@@ -76,6 +76,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         addKeyListener(keyAdapter);
         setFocusable(true);
         requestFocusInWindow();
+
         fogCells = new boolean[gridWidth][gridHeight];
         rainCells = new boolean[gridWidth][gridHeight];
         hitCells = new boolean[gridWidth][gridHeight];
@@ -220,7 +221,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     }
 
 
-    private class Raindrop {
+    class Raindrop {
         int x, y, speed;
 
         Raindrop(int x, int y, int speed) {
