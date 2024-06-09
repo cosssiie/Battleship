@@ -30,13 +30,26 @@ public class Menu extends JFrame {
     private Set<String> playerMovesSet;
 
     public Menu(String name) {
-        setSize(600, 600);
+        setSize(600, 640);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
         ImagePanel imagePanel = new ImagePanel(IMAGE_PATH);
         imagePanel.setLayout(null);
+
+        // Додавання кнопки для інструкції
+        RoundedButton instructionButton = new RoundedButton("Інструкція");
+        instructionButton.setBackground(new Color(255, 255, 255, 250));
+        instructionButton.setFont(new Font("Arial", Font.BOLD, 20));
+        instructionButton.setForeground(Color.BLACK);
+        instructionButton.setBounds(200, 530, 200, 50);
+        instructionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Instructions().setVisible(true);
+            }
+        });
 
         RoundedButton startButton = new RoundedButton("Start");
         startButton.setBackground(new Color(255, 255, 255, 250));
@@ -67,6 +80,7 @@ public class Menu extends JFrame {
         });
 
         imagePanel.add(startButton);
+        imagePanel.add(instructionButton);
         add(imagePanel);
         setVisible(true);
     }
