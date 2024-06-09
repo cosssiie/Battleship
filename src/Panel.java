@@ -26,7 +26,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private boolean[][] hitCells;
 
     private List<Cloud> clouds;
-    private List<Raindrop> raindrops;
     private Timer animationTimer;
 
     private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
@@ -82,9 +81,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         hitCells = new boolean[gridWidth][gridHeight];
 
         clouds = new ArrayList<>();
-        raindrops = new ArrayList<>();
 
-        if (difficultyChoice == 2) { // Складний рівень
+        if (difficultyChoice == 2) {
             generateFogAndRain();
             generateCloudsAndRain();
         }
@@ -96,10 +94,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         Random rand = new Random();
         for (int i = 0; i < fogCells.length; i++) {
             for (int j = 0; j < fogCells[i].length; j++) {
-                if (rand.nextDouble() < 0.1) { // 10% ймовірність туману
+                if (rand.nextDouble() < 0.2) {
                     fogCells[i][j] = true;
                 }
-                if (rand.nextDouble() < 0.1) { // 10% ймовірність дощу
+                if (rand.nextDouble() < 0.2) {
                     rainCells[i][j] = true;
                 }
             }
@@ -114,17 +112,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         for (int i = 0; i < 10; i++) { // Генеруємо 10 хмаринок
             clouds.add(new Cloud(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height / 2)), rand.nextInt(2) + 1));
         }
-        for (int i = 0; i < 100; i++) { // Генеруємо 100 крапель дощу
-            raindrops.add(new Raindrop(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height)), rand.nextInt(5) + 5));
-        }
     }
 
     private void updateAnimation() {
         for (Cloud cloud : clouds) {
             cloud.move();
-        }
-        for (Raindrop raindrop : raindrops) {
-            raindrop.fall();
         }
         repaint();
     }
@@ -132,15 +124,27 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Ваш існуючий код малювання...
+
+        computer.paint(g);
+        player.paint(g);
+        for (Ship ship : placedShips) {
+            ship.paint(g);
+        }
+        if (gameState == GameState.PlacingShips) {
+            placingShip.paint(g);
+        }
+        computer.paintMarkers(g);
+        player.paintMarkers(g);
 
         drawFogAndRain(g);
         drawClouds(g);
-        drawRaindrops(g);
+
+        statusPanel.repaint();
     }
 
+
     private void drawFogAndRain(Graphics g) {
-        g.setColor(new Color(192, 192, 192, 128)); // Напівпрозорий сірий для туману
+        g.setColor(new Color(128, 128, 128, 185));
         for (int i = 0; i < fogCells.length; i++) {
             for (int j = 0; j < fogCells[i].length; j++) {
                 if (fogCells[i][j]) {
@@ -149,7 +153,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             }
         }
 
-        g.setColor(new Color(0, 0, 255, 128)); // Напівпрозорий синій для дощу
+        g.setColor(new Color(0, 0, 255, 185));
         for (int i = 0; i < rainCells.length; i++) {
             for (int j = 0; j < rainCells[i].length; j++) {
                 if (rainCells[i][j]) {
@@ -160,36 +164,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     }
 
     private void drawClouds(Graphics g) {
-        g.setColor(new Color(200, 200, 200, 180)); // Напівпрозорий сірий для хмар
+        g.setColor(new Color(200, 200, 200, 185));
         for (Cloud cloud : clouds) {
             g.fillOval(cloud.x, cloud.y, 60, 30);
         }
-    }
-
-    private void drawRaindrops(Graphics g) {
-        g.setColor(new Color(0, 0, 255, 180)); // Напівпрозорий синій для крапель дощу
-        for (Raindrop raindrop : raindrops) {
-            g.fillOval(raindrop.x, raindrop.y, 5, 10);
-        }
-    }
-
-    public boolean isRainCell(int x, int y) {
-        return rainCells[x][y];
-    }
-
-    public void markHit(int x, int y) {
-        hitCells[x][y] = true;
-    }
-
-    public boolean isHit(int x, int y) {
-        return hitCells[x][y];
-    }
-
-    public void markPosition(int x, int y) {
-        if (!isRainCell(x, y)) {
-            markHit(x, y);
-        }
-        repaint();
     }
 
     private class Cloud {
@@ -220,31 +198,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
     }
 
-
-    class Raindrop {
-        int x, y, speed;
-
-        Raindrop(int x, int y, int speed) {
-            this.x = x;
-            this.y = y;
-            this.speed = speed;
-        }
-
-        void fall() {
-            y += speed;
-            if (y > getHeight()) {
-                y = 0; // Повертаємо краплю дощу зверху
-            }
-        }
-    }
-
     public GameState getGameState() {
         return gameState;
     }
 
-    public Selection getComputer() {
-        return computer;
-    }
 
     @Override
     public void paint(Graphics g) {

@@ -225,12 +225,12 @@ public class Menu extends JFrame {
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
-        gameFrame.setSize(1060, 730);
+        gameFrame.setSize(990, 730);
         gameFrame.setLocationRelativeTo(null);
         gamePanel = new Panel(difficultyChoice, 15, 15);
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
-        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 600, 570, 600, 640);
+        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
     }
 
 
