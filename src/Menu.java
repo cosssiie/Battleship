@@ -10,14 +10,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship//mainMenuMusic.wav";
     private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
-    private static final String IMAGE_WAVES = "Battleship//waves.jpeg";
     public static HashSet playerMovesSet;
     private Clip menuMusicClip;
+    private Clip gameMusicClip;
     private Panel gamePanel;
     public static JButton autoPlaceButton;
     public static JButton nextLevelButton;
@@ -34,7 +35,7 @@ public class Menu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-
+        menuMusicClip = playBackgroundMusic(MENU_MUSIC_PATH);
         ImagePanel imagePanel = new ImagePanel(IMAGE_PATH);
         imagePanel.setLayout(null);
 
@@ -100,17 +101,12 @@ public class Menu extends JFrame {
         setVisible(true);
     }
 
-    private void setBackgroundImage(String imagePath) {
-        ImagePanel imagePanel = new ImagePanel(imagePath);
-        setContentPane(imagePanel);
-        imagePanel.setLayout(null);
-        validate();
-        repaint();
-    }
-
     private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
+        stopMusic(menuMusicClip);
+        gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
+
         levelLabel = new JLabel(levelText);
-        levelLabel.setBounds((gameFrame.getWidth() - 200) / 2, 15, 200, 30);
+        levelLabel.setBounds((gameFrame.getWidth()/2 - 150/ 2), 15, 200, 30);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY);
@@ -193,9 +189,8 @@ public class Menu extends JFrame {
     }
 
     private void easyLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{2};
-        setBackgroundImage("Battleship//waves.jpeg");
-        stopMusic(menuMusicClip);
+        stopMusic(gameMusicClip);
+        Selection.BOAT_SIZES = new int[]{2, 2, 3, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
@@ -205,8 +200,8 @@ public class Menu extends JFrame {
     }
 
     private void mediumLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{5};
-        setBackgroundImage("Battleship//waves.jpeg");
+        stopMusic(gameMusicClip);
+        Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 5};
         JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -214,13 +209,11 @@ public class Menu extends JFrame {
         gameFrame.setSize(860, 650);
         gameFrame.setLocationRelativeTo(null);
         initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 480, 550, 550);
-
-        counterMoves();
     }
 
     private void hardLevel(int difficultyChoice) {
-        Selection.BOAT_SIZES = new int[]{2, 2};
-        setBackgroundImage("Battleship//waves.jpeg");
+        stopMusic(gameMusicClip);
+        Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 4, 5};;
         JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -234,56 +227,6 @@ public class Menu extends JFrame {
     }
 
 
-    //метод-лічильник кроків
-    public void counterMoves(){
-        playerMovesLabel = new JLabel("Player Moves: " + playerMoves);
-        playerMovesLabel.setBounds(10, 10, 200, 30);
-        playerMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        aiMovesLabel = new JLabel("AI Moves: " + aiMoves);
-        aiMovesLabel.setBounds(10, 40, 200, 30);
-        aiMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-
-        gamePanel.add(playerMovesLabel);
-        gamePanel.add(aiMovesLabel);
-
-        // Ініціалізація кількості ходів
-        playerMoves = 0;
-        aiMoves = 0;
-        playerMovesSet = new HashSet<>();
-
-        // Додаємо слухачів для рахунку ходів
-        gamePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                Point mousePosition = new Point(e.getX(), e.getY());
-                String positionKey = mousePosition.x + "," + mousePosition.y;
-
-                if (gamePanel.getGameState() == Panel.GameState.FiringShots && isPositionInside(mousePosition)) {
-                    if (!playerMovesSet.contains(positionKey)) {
-                        // Логіка для ходу гравця
-                        if (playerMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                            playerMoves++;
-                            playerMovesLabel.setText("Player Moves: " + playerMoves);
-                            playerMovesSet.add(positionKey);
-
-                            // Логіка для ходу AI
-                            if (aiMoves < MEDIUM_LEVEL_MAX_MOVES) {
-                                aiMoves++;
-                                aiMovesLabel.setText("AI Moves: " + aiMoves);
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Max moves reached. You lost!");
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    public boolean isPositionInside(Point point) {
-        return point.x >= 0 && point.x < gamePanel.getWidth()/2 && point.y >= 0 && point.y < gamePanel.getHeight()/2;
-    }
 
     public static Clip playBackgroundMusic(String audioPath) {
         try {

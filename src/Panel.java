@@ -94,10 +94,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         Random rand = new Random();
         for (int i = 0; i < fogCells.length; i++) {
             for (int j = 0; j < fogCells[i].length; j++) {
-                if (rand.nextDouble() < 0.2) {
+                if (rand.nextDouble() < 0.3) {
                     fogCells[i][j] = true;
                 }
-                if (rand.nextDouble() < 0.2) {
+                if (rand.nextDouble() < 0.3) {
                     rainCells[i][j] = true;
                 }
             }
@@ -125,37 +125,38 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        drawFogAndRain(g);
+        drawClouds(g);
+
         computer.paint(g);
         player.paint(g);
+
         for (Ship ship : placedShips) {
             ship.paint(g);
         }
+
         if (gameState == GameState.PlacingShips) {
             placingShip.paint(g);
         }
         computer.paintMarkers(g);
         player.paintMarkers(g);
-
-        drawFogAndRain(g);
-        drawClouds(g);
-
         statusPanel.repaint();
     }
 
 
     private void drawFogAndRain(Graphics g) {
-        g.setColor(new Color(128, 128, 128, 185));
-        for (int i = 0; i < fogCells.length; i++) {
-            for (int j = 0; j < fogCells[i].length; j++) {
+        g.setColor(new Color(128, 128, 128, 255));
+        for (int i = 2; i < fogCells.length; i++) {
+            for (int j = 2; j < fogCells[i].length; j++) {
                 if (fogCells[i][j]) {
                     g.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
             }
         }
 
-        g.setColor(new Color(0, 0, 255, 185));
-        for (int i = 0; i < rainCells.length; i++) {
-            for (int j = 0; j < rainCells[i].length; j++) {
+        g.setColor(new Color(0, 0, 255, 255));
+        for (int i = 2; i < rainCells.length; i++) {
+            for (int j = 2; j < rainCells[i].length; j++) {
                 if (rainCells[i][j]) {
                     g.fillRect(i * CELL_SIZE, j * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
@@ -292,11 +293,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             statusPanel.setBottomLine("Destroy all Ships to win!");
         }
     }
-
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x,mousePosition.y);
         if(!computer.isPositionMarked(targetPosition)) {
-//            Menu.playSounds(SHOT_SOUND_PATH); // Play sound when player fires
+            Menu.playSounds(SHOT_SOUND_PATH);
             doPlayerTurn(targetPosition);
 
             if (Menu.autoPlaceButton.isEnabled()) {

@@ -101,7 +101,7 @@ public class Selection extends Rectangle {
     }
 
     private void drawGrid(Graphics g) {
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(52, 109, 241, 123));
         // Draw vertical lines
         int y2 = position.y;
         int y1 = position.y + height;
