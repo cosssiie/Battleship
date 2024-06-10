@@ -23,12 +23,7 @@ public class Menu extends JFrame {
     public static JButton autoPlaceButton;
     public static JButton nextLevelButton;
     private JLabel levelLabel;
-    private JLabel playerMovesLabel;
-    private JLabel aiMovesLabel;
     private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
-    public static int playerMoves;
-    public static int aiMoves;
-
 
     public Menu(String name) {
         setSize(600, 640);
@@ -75,7 +70,8 @@ public class Menu extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Легкий рівень гри почався!");
+                CustomMessage customMessage = new CustomMessage("Легкий рівень гри почався!", 16,new Color(255, 255, 255, 204) , new Color(5, 110, 180, 204), 300, 150, 1, 15);
+                customMessage.showMessageDialog();
                 easyLevel(0);
             }
         });
@@ -119,7 +115,6 @@ public class Menu extends JFrame {
         autoPlaceButton.setForeground(Color.WHITE);
         autoPlaceButton.setBounds(autoPlaceX, autoPlaceY, 200, 50);
         autoPlaceButton.addActionListener(e -> {
-            System.out.println("Кнопка");
             if (gamePanel != null) {
                 gamePanel.autoPlaceShips();
             }
@@ -280,7 +275,7 @@ public class Menu extends JFrame {
         }
     }
 
-    private class RoundedButton extends JButton {
+    public static class RoundedButton extends JButton {
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
