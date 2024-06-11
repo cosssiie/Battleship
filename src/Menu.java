@@ -67,13 +67,13 @@ public class Menu extends JFrame {
         startButton.setFont(new Font("Arial", Font.BOLD, 20));
         startButton.setForeground(Color.BLACK);
         startButton.setBounds(200, 470, 200, 50);
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CustomMessage customMessage = new CustomMessage("Легкий рівень гри почався!", 16,new Color(255, 255, 255, 204) , new Color(5, 110, 180, 204), 300, 150, 1, 15);
-                customMessage.showMessageDialog();
-                easyLevel(0);
-            }
+        startButton.addActionListener(e -> {
+            CustomMessage customMessage = new CustomMessage(
+                    "Battleship/Easy.png",
+                    100, 110, 235, 140,
+                    () -> easyLevel(0)
+            );
+            customMessage.showWindow();
         });
         startButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -105,7 +105,7 @@ public class Menu extends JFrame {
         levelLabel.setBounds((gameFrame.getWidth()/2 - 150/ 2), 15, 200, 30);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
-        gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY);
+        gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY, );
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
 
@@ -150,13 +150,22 @@ public class Menu extends JFrame {
         nextLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Наступний рівень!");
                 if (gamePanel != null) {
                     gameFrame.dispose();
                     if (difficultyChoice == 0) {
-                        mediumLevel(1);
+                        CustomMessage customMessage = new CustomMessage(
+                                "Battleship/Medium.png",
+                                100, 110, 235, 140,
+                                () -> mediumLevel(1)
+                        );
+                        customMessage.showWindow();
                     } else {
-                        hardLevel(2);
+                        CustomMessage customMessage = new CustomMessage(
+                                "Battleship/Hard.png",
+                                100, 110, 235, 140,
+                                () -> hardLevel(2)
+                        );
+                        customMessage.showWindow();
                     }
                 }
             }
@@ -197,7 +206,6 @@ public class Menu extends JFrame {
     private void mediumLevel(int difficultyChoice) {
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 5};
-        JOptionPane.showMessageDialog(null, "Середній рівень гри почався! Кількість пострілів обмежена: " + MEDIUM_LEVEL_MAX_MOVES);
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
@@ -209,7 +217,6 @@ public class Menu extends JFrame {
     private void hardLevel(int difficultyChoice) {
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 4, 5};;
-        JOptionPane.showMessageDialog(null, "Складний рівень гри почався!");
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
