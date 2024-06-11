@@ -155,7 +155,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         }
 
         // level completion condition
-        if (snakeBody.size() >= 10) {
+        if (snakeBody.size() >= 15) {
             levelCompleted = true;
             gameLoop.stop();
             JOptionPane.showMessageDialog(this, "Ви перемогли! Переходите до наступного рівня!");

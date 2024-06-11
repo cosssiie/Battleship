@@ -221,7 +221,46 @@ public class Menu extends JFrame {
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
     }
 
+    public void playSnakeGame() {
+        stopMusic(gameMusicClip);
 
+        JOptionPane.showMessageDialog(null, "Якщо набираєте 10 очок, то проходите до наступного рівня, інакше повертаєтеся на головне меню.", "Умови гри в змійку", JOptionPane.INFORMATION_MESSAGE);
+
+        int boardWidth = 600;
+        int boardHeight = boardWidth;
+
+        JFrame frame = new JFrame("Snake");
+        frame.setVisible(true);
+        frame.setSize(boardWidth, boardHeight);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        SnakeGame snakeGame = new SnakeGame(boardWidth, boardHeight);
+        frame.add(snakeGame);
+        frame.pack();
+        snakeGame.requestFocus();
+
+        snakeGame.addGameCompletionListener(new SnakeGame.GameCompletionListener() {
+            @Override
+            public void onGameWin() {
+                frame.dispose();
+                JOptionPane.showMessageDialog(null, "You won the Snake game! Proceeding to the hard level.");
+                startHardLevel();
+            }
+
+            @Override
+            public void onGameOver() {
+                frame.dispose();
+                JOptionPane.showMessageDialog(null, "You lost the Snake game. Returning to the main menu.");
+                setVisible(true);
+            }
+        });
+    }
+
+    private void startHardLevel() {
+        hardLevel(2);
+    }
 
     public static Clip playBackgroundMusic(String audioPath) {
         try {
