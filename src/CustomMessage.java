@@ -1,58 +1,62 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class CustomMessage extends JDialog {
-    private int fontSize;
-    private String message;
-    private Color backColor;
-    private Color color;
-    private int width;
-    private int height;
-    private int coordinateX;
-    private int coordinateY;
+public class CustomMessage {
 
-    public CustomMessage(String message, int fontSize, Color backColor, Color color, int width, int height, int coordinateX, int coordinateY) {
-        super();
-        this.message = message;
-        this.fontSize = fontSize;
-        this.backColor = backColor;
-        this.color = color;
-        this.width = width;
-        this.height = height;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
-        initialize();
+    private ImageIcon imageIcon;
+    private JLabel imageLabel;
+
+    private static JWindow window;
+
+    private static int xFirst;
+    private static int yFirst;
+    private static int xSec;
+    private static int ySec;
+
+    private Runnable onClick;
+
+    public CustomMessage(String path, int xFirst, int yFirst, int xSec, int ySec, Runnable onClick) {
+        imageIcon = new ImageIcon(path);
+        imageLabel = new JLabel(imageIcon);
+
+        this.xFirst = xFirst;
+        this.yFirst = yFirst;
+        this.xSec = xSec;
+        this.ySec = ySec;
+        this.onClick = onClick;
+
+        window = new JWindow();
+        window.getContentPane().add(imageLabel);
+        window.pack();
+
+        imageLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                handleMouseClick(e, window);
+            }
+        });
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - window.getWidth()) / 2;
+        int y = (screenSize.height - window.getHeight()) / 2;
+        window.setLocation(x, y);
+
+        window.setVisible(true);
     }
 
-    private void initialize() {
-        setSize(width, height);
-        setModal(true);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-
-        JPanel panel = new JPanel();
-        panel.setBackground(backColor);
-        panel.setLayout(null);
-
-        JLabel label = new JLabel(message, SwingConstants.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, fontSize));
-        label.setForeground(color);
-        label.setBounds(coordinateX, coordinateY, width, 20);
-        panel.add(label);
-
-        JButton okayButton = new Menu.RoundedButton("Okay");
-        okayButton.setBackground(new Color(5, 110, 180, 204));
-        okayButton.setFont(new Font("Arial", Font.BOLD, 16));
-        okayButton.setForeground(Color.WHITE);
-        okayButton.setBounds(width / 2 - 50, height / 2, 100, 30);
-        okayButton.addActionListener(e -> dispose());
-
-        panel.add(okayButton);
-
-        setContentPane(panel);
+    public void showWindow() {
+        window.setVisible(true);
     }
 
-    public void showMessageDialog() {
-        setVisible(true);
+    private void handleMouseClick(MouseEvent e, JWindow window) {
+        int x = e.getX();
+        int y = e.getY();
+
+        if (x >= xFirst && x <= xSec && y >= yFirst && y <= ySec) {
+            window.dispose();
+            onClick.run();
+        }
     }
 }
