@@ -2,9 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.List;
-import javax.swing.Timer;
+import java.util.Random;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -28,7 +27,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private List<Cloud> clouds;
     private Timer animationTimer;
 
-    private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
+    private static final String SHOT_SOUND_PATH = "Battleship/shot.wav";
 
     public Panel(int aiChoice, int gridWidth, int gridHeight, Menu menu) {
         this.difficultyChoice = aiChoice;
@@ -110,7 +109,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         int width = getWidth();
         int height = getHeight();
 
-        for (int i = 0; i < 10; i++) { // Генеруємо 10 хмаринок
+        for (int i = 0; i < 10; i++) {
             clouds.add(new Cloud(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height / 2)), rand.nextInt(2) + 1));
         }
     }

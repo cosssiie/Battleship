@@ -10,13 +10,27 @@ import java.util.HashSet;
 import java.util.Set;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
 
 public class Menu extends JFrame {
 
-    private static final String MENU_MUSIC_PATH = "Battleship//mainMenuMusic.wav";
-    private static final String GAME_MUSIC_PATH = "Battleship//gameMusic.wav";
-    private static final String IMAGE_PATH = "Battleship//ship_photo.jpg";
-    public static HashSet playerMovesSet;
+    private static final String MENU_MUSIC_PATH = "Battleship/mainMenuMusic.wav";
+    private static final String GAME_MUSIC_PATH = "Battleship/gameMusic.wav";
+    private static final String IMAGE_PATH = "Battleship/ship_photo.jpg";
+    public static HashSet<String> playerMovesSet;
     private Clip menuMusicClip;
     private Clip gameMusicClip;
     private Panel gamePanel;
@@ -34,18 +48,12 @@ public class Menu extends JFrame {
         ImagePanel imagePanel = new ImagePanel(IMAGE_PATH);
         imagePanel.setLayout(null);
 
-        // Додавання кнопки для інструкції
         RoundedButton instructionButton = new RoundedButton("Інструкція");
         instructionButton.setBackground(new Color(255, 255, 255, 250));
         instructionButton.setFont(new Font("Arial", Font.BOLD, 20));
         instructionButton.setForeground(Color.BLACK);
         instructionButton.setBounds(200, 530, 200, 50);
-        instructionButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Instructions().setVisible(true);
-            }
-        });
+        instructionButton.addActionListener(e -> new Instructions().setVisible(true));
         instructionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -71,7 +79,7 @@ public class Menu extends JFrame {
             CustomMessage customMessage = new CustomMessage(
                     "Battleship/Easy.png",
                     100, 110, 235, 140,
-                    () -> easyLevel(0)
+                    this::easyLevel
             );
             customMessage.showWindow();
         });
@@ -105,7 +113,7 @@ public class Menu extends JFrame {
         levelLabel.setBounds((gameFrame.getWidth()/2 - 150/ 2), 15, 200, 30);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
-        gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY, );
+        gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY, this);
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
 
@@ -192,7 +200,7 @@ public class Menu extends JFrame {
         this.dispose();
     }
 
-    private void easyLevel(int difficultyChoice) {
+    private void easyLevel() {
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
@@ -200,7 +208,7 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(680, 570);
         gameFrame.setLocationRelativeTo(null);
-        initLevel(gameFrame, "Easy Level", difficultyChoice, 10, 10, 400, 390, 400, 460);
+        initLevel(gameFrame, "Easy Level", 0, 10, 10, 400, 390, 400, 460);
     }
 
     private void mediumLevel(int difficultyChoice) {
@@ -222,7 +230,7 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(990, 730);
         gameFrame.setLocationRelativeTo(null);
-        gamePanel = new Panel(difficultyChoice, 15, 15);
+        gamePanel = new Panel(difficultyChoice, 15, 15, this);
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
