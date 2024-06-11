@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.swing.Timer;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
@@ -27,7 +28,17 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
     private List<Cloud> clouds;
     private Timer animationTimer;
 
-    private static final String SHOT_SOUND_PATH = "Battleship/shot.wav";
+    private static final String SHOT_SOUND_PATH = "Battleship//shot.wav";
+
+    public interface GameCompletionListener {
+        void onGameComplete();
+    }
+
+    private GameCompletionListener gameCompletionListener;
+
+    public void addGameCompletionListener(GameCompletionListener listener) {
+        this.gameCompletionListener = listener;
+    }
 
     public Panel(int aiChoice, int gridWidth, int gridHeight, Menu menu) {
         this.difficultyChoice = aiChoice;
@@ -109,7 +120,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         int width = getWidth();
         int height = getHeight();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { // Генеруємо 10 хмаринок
             clouds.add(new Cloud(rand.nextInt(Math.max(1, width)), rand.nextInt(Math.max(1, height / 2)), rand.nextInt(2) + 1));
         }
     }
@@ -322,6 +333,11 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             statusPanel.setBottomLine("Press R to restart or\n \"Next level\"");
             Menu.nextLevelButton.setVisible(true);
             repaint();
+
+            // Повідомляємо про завершення гри
+            if (gameCompletionListener != null) {
+                gameCompletionListener.onGameComplete();
+            }
         }
     }
 

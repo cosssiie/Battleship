@@ -24,6 +24,13 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
 
 public class Menu extends JFrame {
 
@@ -110,7 +117,7 @@ public class Menu extends JFrame {
         gameMusicClip = playBackgroundMusic(GAME_MUSIC_PATH);
 
         levelLabel = new JLabel(levelText);
-        levelLabel.setBounds((gameFrame.getWidth()/2 - 150/ 2), 15, 200, 30);
+        levelLabel.setBounds((gameFrame.getWidth() / 2 - 150 / 2), 15, 200, 30);
         levelLabel.setFont(new Font("Arial", Font.BOLD, 24));
 
         gamePanel = new Panel(difficultyChoice, panelSizeX, panelSizeY, this);
@@ -155,26 +162,23 @@ public class Menu extends JFrame {
         nextLevelButton.setVisible(false);
         gamePanel.add(nextLevelButton);
 
-        nextLevelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (gamePanel != null) {
-                    gameFrame.dispose();
-                    if (difficultyChoice == 0) {
-                        CustomMessage customMessage = new CustomMessage(
-                                "Battleship/Medium.png",
-                                100, 110, 235, 140,
-                                () -> mediumLevel(1)
-                        );
-                        customMessage.showWindow();
-                    } else {
-                        CustomMessage customMessage = new CustomMessage(
-                                "Battleship/Hard.png",
-                                100, 110, 235, 140,
-                                () -> hardLevel(2)
-                        );
-                        customMessage.showWindow();
-                    }
+        nextLevelButton.addActionListener(e -> {
+            if (gamePanel != null) {
+                gameFrame.dispose();
+                if (difficultyChoice == 0) {
+                    CustomMessage customMessage = new CustomMessage(
+                            "Battleship/Medium.png",
+                            100, 110, 235, 140,
+                            () -> mediumLevel(1)
+                    );
+                    customMessage.showWindow();
+                } else {
+                    CustomMessage customMessage = new CustomMessage(
+                            "Battleship/Hard.png",
+                            100, 110, 235, 140,
+                            () -> hardLevel(2)
+                    );
+                    customMessage.showWindow();
                 }
             }
         });
@@ -234,6 +238,9 @@ public class Menu extends JFrame {
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
+
+        // Додаємо слухача для завершення рівня
+        gamePanel.addGameCompletionListener(() -> showCompletionAnimation());
     }
 
     public void playSnakeGame() {
@@ -360,6 +367,16 @@ public class Menu extends JFrame {
             g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 20, 20);
             g2.dispose();
         }
+    }
+
+    private void showCompletionAnimation() {
+        JFrame animationFrame = new JFrame("Вітаємо! Ви пройшли всі рівні!");
+        AnimationPanel animationPanel = new AnimationPanel("Battleship\\7DZz.gif");
+        animationFrame.add(animationPanel);
+        animationFrame.pack();
+        animationFrame.setLocationRelativeTo(null);
+        animationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        animationFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
