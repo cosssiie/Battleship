@@ -352,6 +352,7 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         statusPanel.setBottomLine("Computer " + hitMiss + " " + aiMove + destroyed);
         if (player.areAllShipsDestroyed()) {
             gameState = GameState.GameOver;
+            Menu.playSnakeButton.setVisible(true);
             statusPanel.showGameOver(false);
         }
     }

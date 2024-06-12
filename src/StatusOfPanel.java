@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class StatusOfPanel extends JPanel {
 
@@ -13,7 +15,6 @@ public class StatusOfPanel extends JPanel {
     private final String gameOverBottomLine = "Press R to restart.";
     private JLabel topLine;
     private JLabel bottomLine;
-    private JButton playSnakeButton;
     private int panelWidth;
     private int panelHeight;
     private Menu menu;
@@ -36,33 +37,19 @@ public class StatusOfPanel extends JPanel {
         bottomLine.setFont(font);
         add(bottomLine);
 
-        playSnakeButton = new JButton("Play Snake");
-        playSnakeButton.setBounds((width - 150) / 2, (height / 4) * 3, 150, 40);
-        playSnakeButton.setFont(new Font("Arial", Font.BOLD, 16));
-        playSnakeButton.setVisible(false);
-        playSnakeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (menu != null) {
-                    menu.playSnakeGame();
-                }
-            }
-        });
-        add(playSnakeButton);
-
         reset();
     }
 
     public void reset() {
         setTopLine(placingShipLine1);
         setBottomLine(placingShipLine2);
-        playSnakeButton.setVisible(false);
+        Menu.playSnakeButton.setVisible(false);
     }
 
     public void showGameOver(boolean playerWon) {
         setTopLine(playerWon ? gameOverWinLine : gameOverLossLine);
         setBottomLine(playerWon ? "<html>Press R to restart</html>" : gameOverBottomLine);
-        playSnakeButton.setVisible(true);
+        Menu.playSnakeButton.setVisible(true);
     }
 
     public void setTopLine(String message) {

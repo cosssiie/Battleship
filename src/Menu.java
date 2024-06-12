@@ -7,43 +7,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashSet;
-import java.util.Set;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
+
 
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship/mainMenuMusic.wav";
     private static final String GAME_MUSIC_PATH = "Battleship/gameMusic.wav";
     private static final String IMAGE_PATH = "Battleship/ship_photo.jpg";
-    public static HashSet<String> playerMovesSet;
     private Clip menuMusicClip;
     private Clip gameMusicClip;
     private Panel gamePanel;
     public static JButton autoPlaceButton;
     public static JButton nextLevelButton;
+    public static JButton playSnakeButton;
     private JLabel levelLabel;
+    private int currentLevel;
     private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
 
     public Menu(String name) {
@@ -106,11 +84,35 @@ public class Menu extends JFrame {
             }
         });
 
+        playSnakeButton = new RoundedButton("Play Snake");
+        playSnakeButton.setBackground(new Color(9, 44, 82, 250));
+        setPlaySnakeButtonPosition(currentLevel);
+        playSnakeButton.setFont(new Font("Arial", Font.BOLD, 20));
+        playSnakeButton.setForeground(Color.WHITE);
+        playSnakeButton.setVisible(false);
+
+        playSnakeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (this != null) {
+                    playSnakeGame();
+                }
+            }
+        });
+
         imagePanel.add(startButton);
         imagePanel.add(instructionButton);
         add(imagePanel);
         setVisible(true);
     }
+    private void setPlaySnakeButtonPosition(int level) {
+        if (level == 0) { // Easy level
+            playSnakeButton.setBounds(400, 460, 200, 50);
+        } else if (level == 1) { // Medium level
+            playSnakeButton.setBounds(550, 550, 200, 50);
+        }
+    }
+
 
     private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
         stopMusic(menuMusicClip);
@@ -200,11 +202,31 @@ public class Menu extends JFrame {
             }
         });
 
+        setPlaySnakeButtonPosition(currentLevel);
+        playSnakeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                playSnakeButton.setBackground(new Color(4, 29, 56, 250));
+                playSnakeButton.setFont(new Font("Arial", Font.BOLD, 18));
+                playSnakeButton.setForeground(Color.WHITE);
+                playSnakeButton.setBounds(nextLevelX + 10, nextLevelY + 5, 185, 42);            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                playSnakeButton.setBackground(new Color(9, 44, 82, 250));
+                playSnakeButton.setFont(new Font("Arial", Font.BOLD, 20));
+                playSnakeButton.setBounds(nextLevelX, nextLevelY, 200, 50);
+            }
+        });
+
+        gamePanel.add(playSnakeButton);
+
         gameFrame.setVisible(true);
         this.dispose();
     }
 
     private void easyLevel() {
+        currentLevel = 0;
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
@@ -216,6 +238,7 @@ public class Menu extends JFrame {
     }
 
     private void mediumLevel(int difficultyChoice) {
+        currentLevel = 1;
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
@@ -267,8 +290,13 @@ public class Menu extends JFrame {
             @Override
             public void onGameWin() {
                 frame.dispose();
-                JOptionPane.showMessageDialog(null, "You won the Snake game! Proceeding to the hard level.");
-                startHardLevel();
+                JOptionPane.showMessageDialog(null, "You won the Snake game!");
+                if (currentLevel == 0) {
+                    mediumLevel(1);
+                }
+                else if (currentLevel == 1) {
+                    hardLevel(2);
+                }
             }
 
             @Override
@@ -280,9 +308,6 @@ public class Menu extends JFrame {
         });
     }
 
-    private void startHardLevel() {
-        hardLevel(2);
-    }
 
     public static Clip playBackgroundMusic(String audioPath) {
         try {
