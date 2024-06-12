@@ -158,10 +158,15 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         if (snakeBody.size() >= 2) {
             levelCompleted = true;
             gameLoop.stop();
-            JOptionPane.showMessageDialog(this, "Ви перемогли! Переходите до наступного рівня!");
-            if (listener != null) {
-                listener.onGameWin();
-            }
+            CustomMessage customMessage = new CustomMessage(
+                    "Battleship/YouWon_NextLevel.png",
+                    100, 110, 235, 140,
+                    () -> {
+                        if (listener != null) {
+                            listener.onGameWin();
+                        }}
+            );
+            customMessage.showWindow();
         }
     }
 
@@ -175,12 +180,12 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         repaint();
         if (gameOver) {
             gameLoop.stop();
-            JOptionPane.showMessageDialog(this, "Гра закінчена. Ваш рахунок: " + snakeBody.size());
             if (listener != null) {
                 listener.onGameOver();
             }
         }
     }
+
 
     @Override
     public void keyPressed(KeyEvent e) {

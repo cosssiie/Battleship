@@ -269,8 +269,13 @@ public class Menu extends JFrame {
     public void playSnakeGame() {
         stopMusic(gameMusicClip);
 
-        JOptionPane.showMessageDialog(null, "Якщо набираєте 10 очок, то проходите до наступного рівня, інакше повертаєтеся на головне меню.", "Умови гри в змійку", JOptionPane.INFORMATION_MESSAGE);
-
+        CustomMessage customMessage = new CustomMessage(
+                "Battleship/10Points.png",
+                100, 110, 235, 140,
+                () -> {
+                }
+        );
+        customMessage.showWindow();
         int boardWidth = 600;
         int boardHeight = boardWidth;
 
@@ -290,7 +295,6 @@ public class Menu extends JFrame {
             @Override
             public void onGameWin() {
                 frame.dispose();
-                JOptionPane.showMessageDialog(null, "You won the Snake game!");
                 if (currentLevel == 0) {
                     mediumLevel(1);
                 }
@@ -302,8 +306,14 @@ public class Menu extends JFrame {
             @Override
             public void onGameOver() {
                 frame.dispose();
-                JOptionPane.showMessageDialog(null, "You lost the Snake game. Returning to the main menu.");
-                setVisible(true);
+                CustomMessage customMessage = new CustomMessage(
+                        "Battleship/YouLost.png",
+                        100, 110, 235, 140,
+                        () -> {
+                            setVisible(true);
+                        }
+                );
+                customMessage.showWindow();
             }
         });
     }
