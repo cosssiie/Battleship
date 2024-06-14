@@ -9,14 +9,14 @@ import javax.swing.Timer;
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }
-    public StatusOfPanel statusPanel;
+    public static StatusOfPanel statusPanel;
     private Selection computer;
     private Selection player;
     private Battleship aiController;
     private Ship placingShip;
     private PositionXY tempPlacingPosition;
     private int placingShipIndex;
-    private GameState gameState;
+    public static GameState gameState;
     public static boolean debugModeActive;
     private ArrayList<Ship> placedShips;
     private int difficultyChoice;
@@ -209,10 +209,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
     }
 
-    public GameState getGameState() {
-        return gameState;
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -303,6 +299,8 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
     }
 
+
+
     private void tryFireAtComputer(PositionXY mousePosition) {
         PositionXY targetPosition = computer.getPositionInGrid(mousePosition.x, mousePosition.y);
         if (!computer.isPositionMarked(targetPosition)) {
@@ -313,11 +311,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                 Menu.autoPlaceButton.setEnabled(false);
             }
 
-            if (!computer.areAllShipsDestroyed()) {
-                doAITurn();
+            if (!computer.areAllShipsDestroyed() && gameState != GameState.GameOver) {
+                if (!computer.isPositionMarked(targetPosition)) {
+                    doAITurn(); // Only switch to AI's turn if the player missed
+                }
             }
         }
     }
+
 
     private void doPlayerTurn(PositionXY targetPosition) {
         boolean hit = computer.markPosition(targetPosition);
@@ -326,7 +327,9 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if (hit && computer.getMarkerAtPosition(targetPosition).getAssociatedShip().isDestroyed()) {
             destroyed = "(Destroyed)";
         }
+        Selection.incrementPlayerMovesCount();
         statusPanel.setTopLine("Player " + hitMiss + " " + targetPosition + destroyed);
+
         if (computer.areAllShipsDestroyed()) {
             gameState = GameState.GameOver;
             statusPanel.setTopLine("You won!");
@@ -334,12 +337,14 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
             Menu.nextLevelButton.setVisible(true);
             repaint();
 
-            // Повідомляємо про завершення гри
             if (gameCompletionListener != null) {
                 gameCompletionListener.onGameComplete();
             }
+        } else if (!hit) {
+            doAITurn();
         }
     }
+
 
     private void doAITurn() {
         PositionXY aiMove = aiController.selectMove();
@@ -349,13 +354,18 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         if (hit && player.getMarkerAtPosition(aiMove).getAssociatedShip().isDestroyed()) {
             destroyed = "(Destroyed)";
         }
+        Selection.incrementAIMovesCount();
         statusPanel.setBottomLine("Computer " + hitMiss + " " + aiMove + destroyed);
+
         if (player.areAllShipsDestroyed()) {
             gameState = GameState.GameOver;
             Menu.playSnakeButton.setVisible(true);
             statusPanel.showGameOver(false);
+        } else if (hit) {
+            doAITurn();
         }
     }
+
 
     private void tryMovePlacingShip(PositionXY mousePosition) {
         if (player.isPositionInside(mousePosition)) {

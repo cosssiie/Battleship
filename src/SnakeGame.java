@@ -155,7 +155,7 @@ public class SnakeGame extends JPanel implements ActionListener, KeyListener {
         }
 
         // level completion condition
-        if (snakeBody.size() >= 2) {
+        if (snakeBody.size() >= 10) {
             levelCompleted = true;
             gameLoop.stop();
             CustomMessage customMessage = new CustomMessage(

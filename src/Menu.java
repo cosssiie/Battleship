@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashSet;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.awt.Point;
+
 
 public class Menu extends JFrame {
 
@@ -22,6 +26,9 @@ public class Menu extends JFrame {
     public static JButton playSnakeButton;
     private JLabel levelLabel;
     private int currentLevel;
+    public JLabel playerMovesLabel;
+    public JLabel aiMovesLabel;
+
     private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
 
     public Menu(String name) {
@@ -95,7 +102,14 @@ public class Menu extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (this != null) {
-                    playSnakeGame();
+                    CustomMessage customMessage = new CustomMessage(
+                            "Battleship/10Points.png",
+                            100, 110, 235, 140,
+                            () -> {
+                                playSnakeGame();
+                            }
+                    );
+                    customMessage.showWindow();
                 }
             }
         });
@@ -105,6 +119,7 @@ public class Menu extends JFrame {
         add(imagePanel);
         setVisible(true);
     }
+
     private void setPlaySnakeButtonPosition(int level) {
         if (level == 0) { // Easy level
             playSnakeButton.setBounds(400, 460, 200, 50);
@@ -209,7 +224,8 @@ public class Menu extends JFrame {
                 playSnakeButton.setBackground(new Color(4, 29, 56, 250));
                 playSnakeButton.setFont(new Font("Arial", Font.BOLD, 18));
                 playSnakeButton.setForeground(Color.WHITE);
-                playSnakeButton.setBounds(nextLevelX + 10, nextLevelY + 5, 185, 42);            }
+                playSnakeButton.setBounds(nextLevelX + 10, nextLevelY + 5, 185, 42);
+            }
 
             @Override
             public void mouseExited(MouseEvent e) {
@@ -235,6 +251,7 @@ public class Menu extends JFrame {
         gameFrame.setSize(680, 570);
         gameFrame.setLocationRelativeTo(null);
         initLevel(gameFrame, "Easy Level", 0, 10, 10, 400, 390, 400, 460);
+
     }
 
     private void mediumLevel(int difficultyChoice) {
@@ -247,11 +264,45 @@ public class Menu extends JFrame {
         gameFrame.setSize(860, 650);
         gameFrame.setLocationRelativeTo(null);
         initLevel(gameFrame, "Medium Level", difficultyChoice, 13, 13, 550, 480, 550, 550);
+        counterMoves();
+    }
+
+    public void counterMoves() {
+        playerMovesLabel = new JLabel("Player Moves: " + Selection.playerMovesCount);
+        playerMovesLabel.setBounds(10, 10, 200, 30);
+        playerMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        aiMovesLabel = new JLabel("AI Moves: " + Selection.AIMovesCount);
+        aiMovesLabel.setBounds(10, 40, 200, 30);
+        aiMovesLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+
+        gamePanel.add(playerMovesLabel);
+        gamePanel.add(aiMovesLabel);
+
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                playerMovesLabel.setText("Player Moves: " + Selection.playerMovesCount);
+                aiMovesLabel.setText("AI Moves: " + Selection.AIMovesCount);
+
+                if (Selection.playerMovesCount >= MEDIUM_LEVEL_MAX_MOVES || Selection.AIMovesCount >= MEDIUM_LEVEL_MAX_MOVES) {
+                    Panel.gameState = Panel.GameState.GameOver;
+                    Menu.playSnakeButton.setVisible(true);
+                    Panel.statusPanel.showGameOver(false);
+
+                    CustomMessage customMessage = new CustomMessage(
+                            "Battleship/Limit.png",
+                            100, 110, 235, 140,
+                            () -> playSnakeGame()
+                    );
+                }
+            }
+        });
     }
 
     private void hardLevel(int difficultyChoice) {
         stopMusic(gameMusicClip);
-        Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 4, 5};;
+        Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(false);
@@ -268,14 +319,6 @@ public class Menu extends JFrame {
 
     public void playSnakeGame() {
         stopMusic(gameMusicClip);
-
-        CustomMessage customMessage = new CustomMessage(
-                "Battleship/10Points.png",
-                100, 110, 235, 140,
-                () -> {
-                }
-        );
-        customMessage.showWindow();
         int boardWidth = 600;
         int boardHeight = boardWidth;
 
@@ -297,8 +340,7 @@ public class Menu extends JFrame {
                 frame.dispose();
                 if (currentLevel == 0) {
                     mediumLevel(1);
-                }
-                else if (currentLevel == 1) {
+                } else if (currentLevel == 1) {
                     hardLevel(2);
                 }
             }

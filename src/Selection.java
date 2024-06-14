@@ -15,6 +15,8 @@ public class Selection extends Rectangle {
     private Random rand;
     private boolean showShips;
     private boolean allShipsDestroyed;
+    public static int playerMovesCount;
+    public static int AIMovesCount;
 
     public Selection(int x, int y, int gridWidth, int gridHeight) {
         super(x, y, CELL_SIZE * gridWidth, CELL_SIZE * gridHeight);
@@ -25,6 +27,21 @@ public class Selection extends Rectangle {
         ships = new ArrayList<>();
         rand = new Random();
         showShips = false;
+        playerMovesCount = 0;
+        AIMovesCount = 0;
+    }
+
+
+    public void resetMovesCount() {
+        playerMovesCount = 0;
+        AIMovesCount = 0;
+    }
+
+    public static int incrementPlayerMovesCount() {
+        return playerMovesCount++;
+    }
+    public static int incrementAIMovesCount() {
+        return AIMovesCount++;
     }
 
     public void paint(Graphics g) {
@@ -54,7 +71,6 @@ public class Selection extends Rectangle {
 
     public boolean markPosition(PositionXY posToMark) {
         markers[posToMark.x][posToMark.y].mark();
-
         allShipsDestroyed = true;
         for (Ship ship : ships) {
             if (!ship.isDestroyed()) {

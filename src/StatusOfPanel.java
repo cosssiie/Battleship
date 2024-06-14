@@ -10,11 +10,11 @@ public class StatusOfPanel extends JPanel {
     private final Font font = new Font("Arial", Font.BOLD, 19);
     private final String placingShipLine1 = "Place your Ships on the right!";
     private final String placingShipLine2 = "Z to rotate.";
-    private final String gameOverLossLine = "Game Over! You Lost :(";
-    private final String gameOverWinLine = "You won!";
-    private final String gameOverBottomLine = "Press R to restart.";
-    private JLabel topLine;
-    private JLabel bottomLine;
+    private static final String gameOverLossLine = "Game Over! You Lost :(";
+    private static final String gameOverWinLine = "You won!";
+    private static final String gameOverBottomLine = "Press R to restart.";
+    private static JLabel topLine;
+    private static JLabel bottomLine;
     private int panelWidth;
     private int panelHeight;
     private Menu menu;
@@ -46,17 +46,17 @@ public class StatusOfPanel extends JPanel {
         Menu.playSnakeButton.setVisible(false);
     }
 
-    public void showGameOver(boolean playerWon) {
+    public static void showGameOver(boolean playerWon) {
         setTopLine(playerWon ? gameOverWinLine : gameOverLossLine);
         setBottomLine(playerWon ? "<html>Press R to restart</html>" : gameOverBottomLine);
         Menu.playSnakeButton.setVisible(true);
     }
 
-    public void setTopLine(String message) {
+    public static void setTopLine(String message) {
         topLine.setText(message);
     }
 
-    public void setBottomLine(String text) {
+    public static void setBottomLine(String text) {
         bottomLine.setText(text);
     }
 
