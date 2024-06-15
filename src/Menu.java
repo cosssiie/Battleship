@@ -6,11 +6,6 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashSet;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.awt.Point;
 
 
 public class Menu extends JFrame {

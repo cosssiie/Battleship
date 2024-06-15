@@ -78,6 +78,10 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
                     repaint();
                 } else if (e.getKeyCode() == KeyEvent.VK_R && gameState == GameState.GameOver) {
                     restart();
+                    Menu.autoPlaceButton.setVisible(false);
+                    Menu.nextLevelButton.setVisible(false);
+                    Selection.resetMovesCount();
+
                 }
             }
         };

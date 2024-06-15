@@ -32,7 +32,7 @@ public class Selection extends Rectangle {
     }
 
 
-    public void resetMovesCount() {
+    public static void resetMovesCount() {
         playerMovesCount = 0;
         AIMovesCount = 0;
     }
