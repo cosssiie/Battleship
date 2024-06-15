@@ -6,7 +6,16 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import javax.swing.Timer;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.sound.sampled.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Menu extends JFrame {
 
@@ -25,6 +34,11 @@ public class Menu extends JFrame {
     public JLabel aiMovesLabel;
 
     private static final int MEDIUM_LEVEL_MAX_MOVES = 65;
+    private Timer gameTimer;
+    private Timer displayTimer;
+    private final int TIMER_DELAY = 180000; // 3 хвилини в мілісекундах
+    private int timeRemaining = TIMER_DELAY / 1000; // Час, що залишився, в секундах
+    private JLabel timerLabel;
 
     public Menu(String name) {
         setSize(600, 640);
@@ -120,11 +134,10 @@ public class Menu extends JFrame {
             playSnakeButton.setBounds(400, 460, 200, 50);
         } else if (level == 1) { // Medium level
             playSnakeButton.setBounds(550, 550, 200, 50);
-        }else if (level == 2) { // Medium level
+        } else if (level == 2) { // Medium level
             playSnakeButton.setBounds(630, 620, 200, 50);
         }
     }
-
 
     private void initLevel(JFrame gameFrame, String levelText, int difficultyChoice, int panelSizeX, int panelSizeY, int autoPlaceX, int autoPlaceY, int nextLevelX, int nextLevelY) {
         stopMusic(menuMusicClip);
@@ -248,13 +261,7 @@ public class Menu extends JFrame {
         gameFrame.setSize(680, 570);
         gameFrame.setLocationRelativeTo(null);
 
-//        CloudAnimation cloudAnimation = new CloudAnimation();
-//        cloudAnimation.setBounds(0, 0, gameFrame.getWidth(), gameFrame.getHeight());
-//        gameFrame.add(cloudAnimation);
-
-
         initLevel(gameFrame, "Easy Level", 0, 10, 10, 400, 390, 400, 460);
-
     }
 
     private void mediumLevel(int difficultyChoice) {
@@ -320,11 +327,25 @@ public class Menu extends JFrame {
         cloudAnimation.setBounds(0, 0, gameFrame.getWidth(), gameFrame.getHeight());
         gameFrame.add(cloudAnimation);
 
+        // Ініціалізація таймера
+        initializeTimer();
+
+        // Створення та додавання JLabel для таймера
+        timerLabel = new JLabel("Час: " + formatTime(timeRemaining));
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Додавання JLabel до gameFrame
+        gameFrame.setLayout(new BorderLayout());
+        gameFrame.add(timerLabel, BorderLayout.NORTH);
+        gameFrame.add(gamePanel, BorderLayout.CENTER);
 
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
 
         // Додаємо слухача для завершення рівня
         gamePanel.addGameCompletionListener(() -> showCompletionAnimation());
+        gameFrame.setVisible(true);
+        this.dispose();
     }
 
     public void playSnakeGame() {
@@ -371,7 +392,6 @@ public class Menu extends JFrame {
             }
         });
     }
-
 
     public static Clip playBackgroundMusic(String audioPath) {
         try {
@@ -466,6 +486,39 @@ public class Menu extends JFrame {
         animationFrame.setLocationRelativeTo(null);
         animationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         animationFrame.setVisible(true);
+    }
+
+    // Метод для ініціалізації таймера
+    private void initializeTimer() {
+        // Таймер для завершення гри
+        gameTimer = new Timer(TIMER_DELAY, e -> endGame());
+        gameTimer.setRepeats(false);
+        gameTimer.start();
+
+        // Таймер для оновлення відображення часу
+        displayTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timeRemaining--;
+                timerLabel.setText("Час: " + formatTime(timeRemaining));
+            }
+        });
+        displayTimer.start();
+    }
+
+    // Метод для завершення гри
+    private void endGame() {
+        gameTimer.stop();
+        displayTimer.stop();
+        JOptionPane.showMessageDialog(this, "Час вийшов! Ви програли.");
+        System.exit(0);
+    }
+
+    // Метод для форматування часу в хвилини:секунди
+    private String formatTime(int seconds) {
+        int minutes = seconds / 60;
+        int secs = seconds % 60;
+        return String.format("%02d:%02d", minutes, secs);
     }
 
     public static void main(String[] args) {
