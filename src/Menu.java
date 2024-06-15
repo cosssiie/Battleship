@@ -54,7 +54,25 @@ public class Menu extends JFrame {
         instructionButton.setFont(new Font("Arial", Font.BOLD, 20));
         instructionButton.setForeground(Color.BLACK);
         instructionButton.setBounds(200, 530, 200, 50);
-        instructionButton.addActionListener(e -> new Instructions().setVisible(true));
+        
+        instructionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (this != null) {
+                    CustomMessage customMessage = null;
+                    CustomMessage finalCustomMessage = customMessage;
+                    customMessage = new CustomMessage(
+                            "Battleship/rules.png",
+                            1245, 25, 1300, 80,
+                            () -> {
+                                finalCustomMessage.closeWindow();
+                            }
+                    );
+                    customMessage.showWindow();
+                }
+            }
+        });
+        
         instructionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
