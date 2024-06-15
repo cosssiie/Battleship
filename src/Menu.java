@@ -10,13 +10,6 @@ import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.sound.sampled.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship/mainMenuMusic.wav";
@@ -54,7 +47,7 @@ public class Menu extends JFrame {
         instructionButton.setFont(new Font("Arial", Font.BOLD, 20));
         instructionButton.setForeground(Color.BLACK);
         instructionButton.setBounds(200, 530, 200, 50);
-        
+
         instructionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +65,7 @@ public class Menu extends JFrame {
                 }
             }
         });
-        
+
         instructionButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -528,8 +521,14 @@ public class Menu extends JFrame {
     private void endGame() {
         gameTimer.stop();
         displayTimer.stop();
-        JOptionPane.showMessageDialog(this, "Час вийшов! Ви програли.");
-        System.exit(0);
+
+        CustomMessage customMessage = new CustomMessage(
+                "Battleship/timePassed.png",
+                100, 110, 235, 140,
+                () -> System.exit(0)
+        );
+        customMessage.showWindow();
+
     }
 
     // Метод для форматування часу в хвилини:секунди
