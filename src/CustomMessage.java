@@ -50,6 +50,10 @@ public class CustomMessage {
         window.setVisible(true);
     }
 
+    public void closeWindow() {
+        window.dispose();
+    }
+
     private void handleMouseClick(MouseEvent e, JWindow window) {
         int x = e.getX();
         int y = e.getY();
