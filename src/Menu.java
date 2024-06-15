@@ -120,6 +120,8 @@ public class Menu extends JFrame {
             playSnakeButton.setBounds(400, 460, 200, 50);
         } else if (level == 1) { // Medium level
             playSnakeButton.setBounds(550, 550, 200, 50);
+        }else if (level == 2) { // Medium level
+            playSnakeButton.setBounds(630, 620, 200, 50);
         }
     }
 
@@ -245,6 +247,12 @@ public class Menu extends JFrame {
         gameFrame.setResizable(false);
         gameFrame.setSize(680, 570);
         gameFrame.setLocationRelativeTo(null);
+
+//        CloudAnimation cloudAnimation = new CloudAnimation();
+//        cloudAnimation.setBounds(0, 0, gameFrame.getWidth(), gameFrame.getHeight());
+//        gameFrame.add(cloudAnimation);
+
+
         initLevel(gameFrame, "Easy Level", 0, 10, 10, 400, 390, 400, 460);
 
     }
@@ -296,6 +304,7 @@ public class Menu extends JFrame {
     }
 
     private void hardLevel(int difficultyChoice) {
+        currentLevel = 2;
         stopMusic(gameMusicClip);
         Selection.BOAT_SIZES = new int[]{2, 2, 3, 3, 4, 4, 5};
         JFrame gameFrame = new JFrame("Battleship");
@@ -306,6 +315,12 @@ public class Menu extends JFrame {
         gamePanel = new Panel(difficultyChoice, 15, 15, this);
         gamePanel.setLayout(null);
         gameFrame.getContentPane().add(gamePanel);
+
+        CloudAnimation cloudAnimation = new CloudAnimation();
+        cloudAnimation.setBounds(0, 0, gameFrame.getWidth(), gameFrame.getHeight());
+        gameFrame.add(cloudAnimation);
+
+
         initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
 
         // Додаємо слухача для завершення рівня
@@ -336,6 +351,8 @@ public class Menu extends JFrame {
                 if (currentLevel == 0) {
                     mediumLevel(1);
                 } else if (currentLevel == 1) {
+                    hardLevel(2);
+                } else if (currentLevel == 2) {
                     hardLevel(2);
                 }
             }
