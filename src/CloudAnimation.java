@@ -11,7 +11,7 @@ public class CloudAnimation extends JComponent {
     public CloudAnimation() {
         clouds = new ArrayList<>();
 
-        int xRight = -800;
+        int xRight = -600;
         int yRight = new Random().nextInt(20);
         int speedRight = 2 + new Random().nextInt(2);
         clouds.add(new Cloud("Battleship//cloud.png", xRight, yRight, -speedRight));
@@ -46,7 +46,7 @@ public class CloudAnimation extends JComponent {
         }
 
         public void move() {
-            if (x < -300) {
+            if (x < -200) {
                 x += 1;
             } else {
                 speed = 0;

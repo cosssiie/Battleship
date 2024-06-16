@@ -145,8 +145,8 @@ public class Menu extends JFrame {
             playSnakeButton.setBounds(400, 460, 200, 50);
         } else if (level == 1) { // Medium level
             playSnakeButton.setBounds(550, 550, 200, 50);
-        } else if (level == 2) { // Medium level
-            playSnakeButton.setBounds(630, 620, 200, 50);
+        } else if (level == 2) { // Hard level
+            playSnakeButton.setBounds(630, 610, 200, 50);
         }
     }
 
@@ -351,7 +351,7 @@ public class Menu extends JFrame {
         gameFrame.add(timerLabel, BorderLayout.NORTH);
         gameFrame.add(gamePanel, BorderLayout.CENTER);
 
-        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 620);
+        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 610, 620);
 
         // Додаємо слухача для завершення рівня
         gamePanel.addGameCompletionListener(() -> showCompletionAnimation());
@@ -385,7 +385,7 @@ public class Menu extends JFrame {
                 } else if (currentLevel == 1) {
                     hardLevel(2);
                 } else if (currentLevel == 2) {
-                    hardLevel(2);
+                    showCompletionAnimation();
                 }
             }
 

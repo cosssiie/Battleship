@@ -99,7 +99,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener 
         }
         computer.paintMarkers(g);
         player.paintMarkers(g);
-
         statusPanel.repaint();
     }
 
