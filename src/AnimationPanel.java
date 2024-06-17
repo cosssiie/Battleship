@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ * Клас для анімації gif
+ */
 public class AnimationPanel extends JPanel {
     private ImageIcon animationIcon;
 

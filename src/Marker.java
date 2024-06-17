@@ -1,5 +1,10 @@
 import java.awt.*;
 
+
+/**
+ * Клас-маркер ігрового поля
+ *
+ * */
 public class Marker extends Rectangle {
 
     private final Color HIT_COLOUR = new Color(252, 9, 9, 180);

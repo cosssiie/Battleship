@@ -3,6 +3,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
+/**
+ * Клас для виводу кастомних повідомлень користувачу
+ *
+ * */
 public class CustomMessage {
 
     private ImageIcon imageIcon;

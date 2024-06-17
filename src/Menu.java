@@ -5,11 +5,16 @@ import java.awt.Rectangle;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
+/**
+ *
+ * Головний клас гри, з якого її можна запустити
+ *
+ * */
 public class Menu extends JFrame {
 
     private static final String MENU_MUSIC_PATH = "Battleship/mainMenuMusic.wav";

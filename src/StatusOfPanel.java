@@ -5,6 +5,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+
+/**
+ * Клас для панелі з текстом
+ *
+ * */
 public class StatusOfPanel extends JPanel {
 
     private final Font font = new Font("Arial", Font.BOLD, 19);

@@ -2,6 +2,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Створення кораблів та надання їм властивостей
+ *
+ * */
 public class Ship {
     public enum ShipPlacementColour {Valid, Invalid, Placed}
 

@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Логіка компютера для середнього і складного рівнів. Більш продумані кроки та постріли
+ *
+ * */
 public class Smarter extends Battleship{
 
     private List<PositionXY> shipHits;

@@ -1,5 +1,10 @@
 import java.util.Collections;
 
+
+/**
+ * Логіка комп'ютера для легкого рівня
+ *
+ * */
 public class SimpleRandom extends Battleship {
 
     public SimpleRandom(Selection playerGrid) {

@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
 
+/**
+ *
+ * Клас для анімації хмари на складному рівні
+ *
+ * */
 public class CloudAnimation extends JComponent {
     private ArrayList<Cloud> clouds;
 

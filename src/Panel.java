@@ -2,10 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import javax.swing.Timer;
 
+
+/**
+ * Клас для створення ігрової панелі
+ *
+ * */
 public class Panel extends JPanel implements MouseListener, MouseMotionListener {
 
     public enum GameState { PlacingShips, FiringShots, GameOver }

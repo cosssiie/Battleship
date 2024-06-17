@@ -1,4 +1,8 @@
 
+/**
+ * Позиція корабля всередині ігровго поля
+ *
+ * */
 public class PositionXY {
 
     public static final PositionXY DOWN = new PositionXY(0,1);

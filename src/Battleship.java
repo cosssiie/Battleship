@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Клас промальовки ходів
+ *
+ * */
 public class Battleship {
    
     protected Selection playerGrid;

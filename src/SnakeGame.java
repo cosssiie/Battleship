@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
+
+/**
+ * Клас міні-гри в змійку
+ *
+ * */
 public class SnakeGame extends JPanel implements ActionListener, KeyListener {
     public interface GameCompletionListener {
         void onGameWin();

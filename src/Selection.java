@@ -3,6 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * Клас для коректного розташування кораблів всередині ігрового поля
+ *
+ * */
 public class Selection extends Rectangle {
 
     public static final int CELL_SIZE = 30;
