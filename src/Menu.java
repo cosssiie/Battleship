@@ -351,7 +351,7 @@ public class Menu extends JFrame {
         gameFrame.add(timerLabel, BorderLayout.NORTH);
         gameFrame.add(gamePanel, BorderLayout.CENTER);
 
-        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 610, 620);
+        initLevel(gameFrame, "Hard Level", difficultyChoice, 15, 15, 630, 550, 630, 610);
 
         // Додаємо слухача для завершення рівня
         gamePanel.addGameCompletionListener(() -> showCompletionAnimation());
